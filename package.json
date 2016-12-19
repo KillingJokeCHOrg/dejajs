@@ -1,15 +1,14 @@
 {
-  "name": "@deja-js/angular2",
+  "name": "deja-angular2",
   "version": "0.0.1",
   "description": "Angular2 Components Library",
   "homepage": "https://github.com/killingjokeCH/dejajs",
   "bugs": "https://github.com/killingjokeCH/dejajs/issues",
+  "author": "Team killingJoke.CH",
   "license": "Apache-2.0",
   "repository": {
-    "url": "https://www.npmjs.com/~killing.joke.ch"
-  },
-  "publishConfig": {
-    "registry": "https://www.npmjs.com/~killing.joke.ch"
+	"type": "git",
+    "url": "https://github.com/KillingJokeCHOrg/dejajs.git"
   },
   "scripts": {
     "drug": "json-server --port 5202 --ro -q ./src/demo-app/services/drug-event-0003-of-0003-2.json",
@@ -21,10 +20,24 @@
     "build": "webpack-dev-server --inline --progress --port 5200 --config webpack.config.dev.js",
     "start": " npm run build-css && concurrently \"npm run countries\" \"npm run drug\" \"npm run build\"",
     "prepublish": "tsc && npm run build-css",
-    "publish": "npm publish .",
     "build:prod": "del-cli dist &&  npm run build-css && webpack -p --config webpack.config.prod.js",
     "serve": "lite-server && concurrently \"npm run countries\" \"npm run drug\""
   },
+  "keywords": [
+        "angular2",
+        "material",
+        "component",
+        "grid",
+        "datagrid",
+        "datepicker",
+        "colorpicker",
+        "messagebox",
+        "monaco",
+		"select",
+		"textarea",
+		"tiles",
+		"snackbar"
+    ],
   "dependencies": {
     "@angular/common": "~2.1.0",
     "@angular/compiler": "~2.1.0",
