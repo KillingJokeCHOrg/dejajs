@@ -1,15 +1,15 @@
 {
   "name": "@deja-js/angular2",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Angular2 Components Library",
   "homepage": "https://github.com/killingjokeCH/dejajs",
   "bugs": "https://github.com/killingjokeCH/dejajs/issues",
   "license": "Apache-2.0",
   "repository": {
-    "url": "http://129.195.13.159:8081/nexus/repository/npm-all/"
+    "url": "https://www.npmjs.com/~killing.joke.ch"
   },
   "publishConfig": {
-    "registry": "http://129.195.13.159:8081/nexus/repository/npm-internal/"
+    "registry": "https://www.npmjs.com/~killing.joke.ch"
   },
   "scripts": {
     "drug": "json-server --port 5202 --ro -q ./src/demo-app/services/drug-event-0003-of-0003-2.json",
