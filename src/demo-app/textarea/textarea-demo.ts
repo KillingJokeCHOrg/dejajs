@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'textarea-demo',
-    templateUrl: './textarea-demo.html',
     styleUrls: ['./textarea-demo.scss'],
+    templateUrl: './textarea-demo.html',
 })
 export class TextAreaDemo implements OnInit {
     protected multitext = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br />

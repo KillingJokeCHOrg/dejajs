@@ -11,22 +11,17 @@ import { IWeight, Weight } from './weight.interface';
 })
 export class DejaRangeDemo {
     public readOnlyRanges: Range[];
-
     public rangesWithInterval: Range[];
     public steps: number[];
-
     public ranges: Range[];
     public numericStep: number = 1;
-
     public weights: Weight[];
-
 
     public errors: Observable<any>;
     @Output() protected errorFeed: EventEmitter<any> = new EventEmitter();
 
     @ViewChild('dejaRange') protected rangeRef;
     @ViewChild('dejaWeight') protected weightRef;
-
 
     constructor() {
         this.readOnlyRanges = readOnlyRanges;
@@ -48,7 +43,6 @@ export class DejaRangeDemo {
             .scan((acc, curr) => [...acc, curr], [])
             .defaultIfEmpty([]);
     }
-
 
     /**
      * compute next step for the weights (rounded to one)
@@ -83,7 +77,6 @@ export class DejaRangeDemo {
 
         return newRangeMax;
     }
-
 
     /**
      * compute range min and max from weight value

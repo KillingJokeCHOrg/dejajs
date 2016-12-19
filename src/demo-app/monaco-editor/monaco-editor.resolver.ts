@@ -1,10 +1,7 @@
-/**
- * Created by rtr on 25.11.2016.
- */
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
-import {MonacoEditorDemoService} from "./monaco-editor-demo.service.";
+import { MonacoEditorDemoService } from "./monaco-editor-demo.service.";
 
 @Injectable()
 export class MonacoEditorXmlFileResolver implements Resolve<any> {

@@ -28,7 +28,7 @@ export class TilesDemo extends OnInit {
         this.countriesService.getCountries().subscribe((value: ICountry[]) => {
             this.countries = value;
             this.refershTiles();
-        }, error => {
+        }, (error) => {
             this.handleError(error);
         });
     }
@@ -58,8 +58,8 @@ export class TilesDemo extends OnInit {
                     (event.target as HTMLElement).innerText = `The dropped country is ${model.country.naqme} - the code is: ${model.country.code}`;
                     event.preventDefault();
                 }
-            }
-        }
+            },
+        };
     }
 
     protected onTitleEditClick(e: IDejaTileEvent) {
@@ -89,12 +89,12 @@ export class TilesDemo extends OnInit {
         let colorIndex = 0;
         this.countries.map((country, index) => {
             tiles.push({
+                bounds: new Rect(x, y, 15, 15),
                 id: country.code,
                 templateModel: {
-                    country: country,
                     color: colors[colorIndex].toHex(),
+                    country: country,
                 } as ITemplateModel,
-                bounds: new Rect(x, y, 15, 15),
             } as IDejaTile);
 
             if (++colorIndex >= colors.length) {

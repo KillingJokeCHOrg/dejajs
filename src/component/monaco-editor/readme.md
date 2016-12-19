@@ -23,12 +23,12 @@ export class DejaMonacoEditorDemo implements OnInit {
 		this.code = `<GROUP ID="GROUP_PROBE_UPSRV">
         <LABEL><![CDATA[UserProfile]]></LABEL>
         <TAG>up upsrv</TAG>
-        <PROBE ID="HUGLOG_SLOW_COMPONENT_UPSRV"/>
-        <PROBE ID="HUGLOG_ERROR_COMPONENT_UPSRV"/>
-        <PROBE ID="HUGLOG_UPSERVER_SQL_PERF"/>
+        <PROBE ID="LOG_SLOW_COMPONENT_UPSRV"/>
+        <PROBE ID="LOG_ERROR_COMPONENT_UPSRV"/>
+        <PROBE ID="LOG_UPSERVER_SQL_PERF"/>
         <PROBE ID="PERF_DATABASE_UPSRV"/>
         <PROBE ID="PING_DATABASE_UPSRV"/>
-        <PROBE ID="HUGLOG_PROBLEM_WITH_SERVER_COMPONENT_UPSRV"/>
+        <PROBE ID="LOG_PROBLEM_WITH_SERVER_COMPONENT_UPSRV"/>
         <JAVACODE>
             <![CDATA[
 			]]>

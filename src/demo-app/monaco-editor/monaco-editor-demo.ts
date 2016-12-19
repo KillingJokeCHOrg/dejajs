@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {MonacoEditorDemoService} from "./monaco-editor-demo.service.";
 import {ActivatedRoute} from "@angular/router";
 import {IEditorLanguage} from "../../component/monaco-editor/options/editor-language.model";
 import {IEditorOptions} from "../../component/monaco-editor/options/editor-options.model";
 import {IEditorTheme} from "../../component/monaco-editor/options/editor-theme.component";
+import {MonacoEditorDemoService} from "./monaco-editor-demo.service.";
 
 const xmlFile = 'xmlFile';
 const xmlToCompareFile = 'xmlToCompareFile';
@@ -11,12 +11,12 @@ const jsonFile = 'jsonFile';
 const jsonToCompareFile = 'jsonToCompareFile';
 
 @Component({
+    providers: [MonacoEditorDemoService],
     selector: 'deja-monaco-editor-demo',
     styleUrls: [
         './monaco-editor-demo.scss',
     ],
     templateUrl: './monaco-editor-demo.html',
-    providers: [MonacoEditorDemoService],
 })
 export class DejaMonacoEditorDemo implements OnInit {
     protected language: IEditorLanguage = IEditorLanguage.XML;

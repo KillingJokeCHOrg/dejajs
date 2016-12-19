@@ -94,7 +94,6 @@ export class DejaDateSelectorComponent implements AfterContentInit {
             if (this.mouseMoveObs) {
                 return;
             }
-            debugger;
             this.mouseMoveObs = Observable.fromEvent(this.dateSelectorBodyElem.nativeElement, 'mousemove').subscribe((event: MouseEvent) => {
                 if (!this.keyboardNavigationPos) {
                     this.keyboardNavigationPos = new Position(event.x, event.y);

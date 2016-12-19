@@ -36,4 +36,3 @@ export const weights = [
 export const steps = [
     1, 2, 4, 8, 16, 20, 22, 24,
 ];
-

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'deja-circular-picker-demo',
-    templateUrl: './circular-picker-demo.html',
     styleUrls: ['./circular-picker-demo.scss'],
+    templateUrl: './circular-picker-demo.html',
 })
 export class DejaCircularPickerDemo implements OnInit {
     public tutu = 3;

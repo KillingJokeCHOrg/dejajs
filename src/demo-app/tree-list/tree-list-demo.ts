@@ -1,8 +1,8 @@
-import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
-import { CountriesService, ICountry } from "../services/countries.service";
-import { IItemTree, GroupingService, IGroupInfo } from '../../common/core';
-import { IDejaDragEvent, DejaTreeListItemsEvent, DejaTreeListComponent } from '../../component';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
+import { GroupingService, IGroupInfo, IItemTree } from '../../common/core';
+import { DejaTreeListComponent, DejaTreeListItemsEvent, IDejaDragEvent } from '../../component';
+import { CountriesService, ICountry } from "../services/countries.service";
 
 @Component({
     encapsulation: ViewEncapsulation.None,

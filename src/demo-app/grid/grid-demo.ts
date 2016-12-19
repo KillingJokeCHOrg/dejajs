@@ -89,7 +89,7 @@ export class GridDemo {
             label: 'qualification',
             name: 'qualification',
             width: '55px',
-        }
+        },
     ] as IDejaGridColumn[];
 
     protected percentColumns = [
@@ -152,8 +152,8 @@ export class GridDemo {
             width: '3%',
         },
         {
-            name: 'patientonsetageunit',
             label: 'patientonsetageunit',
+            name: 'patientonsetageunit',
             width: '2%',
         },
         {

@@ -1,10 +1,10 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { GlobalEventService } from '../../common/global-event/global-event.service';
 
 @Component({
   selector: 'events-demo',
-  templateUrl: './global-events-demo.html',
   styleUrls: ['./global-events-demo.scss'],
+  templateUrl: './global-events-demo.html',
 })
 export class GlobalEventsDemo implements OnInit {
   private model = {

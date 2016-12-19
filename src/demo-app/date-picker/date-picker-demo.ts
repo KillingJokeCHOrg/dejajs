@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'dejadate-picker-demo',
-    templateUrl: './date-picker-demo.html',
     styleUrls: ['./date-picker-demo.scss'],
+    templateUrl: './date-picker-demo.html',
 })
 export class DejaDatePickerDemo implements OnInit {
     public toto = new Date();

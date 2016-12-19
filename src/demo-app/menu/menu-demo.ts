@@ -1,10 +1,10 @@
 import {Component, ViewEncapsulation} from '@angular/core';
 
 @Component({
-  selector: 'deja-menu-demo',
-  templateUrl: './menu-demo.html',
-  styleUrls: ['./menu-demo.scss'],
   encapsulation: ViewEncapsulation.None,
+  selector: 'deja-menu-demo',
+  styleUrls: ['./menu-demo.scss'],
+  templateUrl: './menu-demo.html',
 })
 export class MenuDemo {
   public selected = '';
