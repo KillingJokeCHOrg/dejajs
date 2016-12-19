@@ -1,0 +1,6 @@
+<div class="base-colors" [attr.disabled]="disabled">
+	<div id="basecolor" class="color" *ngFor="let colorobj of colors; let index=index" [attr.color]=colorobj.toHex() [attr.index]=index [style.background-color]=colorobj.toHex() [class.active]="index === selectBaseIndex"></div>
+</div>
+<div class="varied-colors" [attr.disabled]="disabled" [class.active]="varActive">
+	<div id="subcolor" class="color-var" *ngFor="let colorobj of subColors; let index=index" [style.transition-duration]="(100*index)+'ms'" [attr.color]=colorobj.toHex() [style.background-color]=colorobj.toHex() [class.active]="index === selectVarIndex"></div>
+</div>

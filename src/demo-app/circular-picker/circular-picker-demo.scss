@@ -1,0 +1,14 @@
+.listContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    padding: 2rem 0;
+    > div {
+        flex: 1;
+        deja-circular-picker {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
+    }
+}

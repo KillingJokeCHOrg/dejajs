@@ -1,0 +1,16 @@
+<md-card class="demo-card demo-basic">
+	<md-toolbar color="secondary">Circular-picker demo simple - Range 1 to 20 (inside and outside labels)</md-toolbar>
+	<md-card-content class="listContainer">
+		<div>
+			<deja-circular-picker UserType="HUG,    HIN" [ranges]="ranges1"></deja-circular-picker>
+		</div>
+		<div>
+			<deja-circular-picker [ranges]="ranges2" [outerLabels]="true"></deja-circular-picker>
+		</div>
+	</md-card-content>
+	<md-toolbar color="secondary">Circular-picker demo multiple range (inside labels)</md-toolbar>
+	<md-card-content class="listContainer">
+		Selected Value : {{tutu}}
+		<deja-circular-picker [(ngModel)]="tutu" [ranges]="ranges3" [replaceValues]="replaceValues"></deja-circular-picker>
+	</md-card-content>
+</md-card>

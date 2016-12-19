@@ -1,0 +1,16 @@
+:host {
+	display: flex;
+	align-items: center;
+	#word {
+        padding-right: 0.3rem;
+		flex: 1;
+		#content {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			&.bold {
+				font-weight: bold;
+			}
+		}
+	}
+}

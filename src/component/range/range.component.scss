@@ -1,0 +1,90 @@
+@import "~@angular/material/core/style/_elevation.scss";
+@import "~@angular/material/core/style/_variables.scss";
+@import "../../scss/variables/_colors.scss";
+:host {
+    
+    // the size of the separator has to be specified
+    $separator-width: 7px;
+    /* these styles mustn't be overriden */
+    display: flex;
+    * {
+        user-select: none;
+    }
+    .block {
+        display: inline-flex;
+    }
+    .range {
+        display: inline-flex;
+        flex-grow: 100;
+        justify-content: center;
+    }
+    .separator {
+        display: inline-flex;
+        flex-basis: auto;
+        justify-content: center;
+        z-index: 5;
+    }
+    /* these styles could be overriden */
+    @include md-elevation(1);
+    $accent: $secondary;
+    $height: 40px;
+    height: $height;
+    .range {
+        width: $separator-width;
+        cursor: pointer;
+        .default-range {
+            align-self: center;
+            font-size: 10pt;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+    .separator {
+        cursor: ew-resize;
+        .default-separator {
+            width: 7px;
+            height: $height / 10 * 8;
+            margin-top: $height / 10;
+            display: flex;
+            justify-content: center;
+            .default-separator-item {
+                height: 100%;
+                width: 1px;
+                background: $primary;
+            }
+        }
+    }
+    .range.selected {
+        animation-name: selected;
+        animation-duration: 175ms;
+        animation-fill-mode: both;
+        animation-timing-function: ease-in-out;
+    }
+    .range:not(.selected) {
+        animation-name: not-selected;
+        animation-duration: 175ms;
+        animation-fill-mode: both;
+        animation-timing-function: ease-in-out;
+    }
+    @keyframes selected {
+        from {
+            border-bottom: 0px solid $accent;
+        }
+        to {
+            border-bottom: 2px solid $accent;
+        }
+    }
+    @keyframes not-selected {
+        from {
+            border-bottom: 2px solid $accent;
+        }
+        to {
+            border-bottom: 0px solid $accent;
+        }
+    }
+}
+
+:host:hover {
+    @include md-elevation(2);
+}

@@ -1,0 +1,23 @@
+/deep/ md-progress-circle.primary {
+    path {
+        stroke: $primary;
+    }
+}
+
+/deep/ md-progress-circle.danger {
+    path {
+        stroke: $red;
+    }
+}
+
+/deep/ md-progress-circle.warn {
+    path {
+        stroke: $warning;
+    }
+}
+
+/deep/ md-progress-circle.success {
+    path {
+        stroke: $success;
+    }
+}

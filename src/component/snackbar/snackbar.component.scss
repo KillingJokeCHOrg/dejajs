@@ -1,0 +1,15 @@
+:host {
+    #container {
+        /* mandatory styles */
+        position: fixed;
+        box-sizing: border-box;
+        z-index: 25;
+        /* styles used for compatibility with smaller devices i.e. Tablet*/
+        max-width: 200px;
+        min-width: 200px;
+    }
+    /* class added if a container if specified for the snackbar*/
+    .absolute {
+        position: absolute !important;
+    }
+}
