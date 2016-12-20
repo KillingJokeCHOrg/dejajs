@@ -1,6 +1,6 @@
 {
   "name": "deja-angular2",
-  "version": "0.0.1-beta0",
+  "version": "0.0.1-beta1",
   "description": "Angular2 Components Library",
   "homepage": "https://github.com/killingjokeCH/dejajs",
   "bugs": "https://github.com/killingjokeCH/dejajs/issues",
@@ -40,7 +40,8 @@
 		"tiles",
 		"snackbar",
 		"demo",
-		"demo-app"
+		"demo-app",
+		"webpack"
 		
     ],
   "dependencies": {
