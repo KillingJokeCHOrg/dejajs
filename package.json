@@ -29,6 +29,8 @@
         "component",
         "grid",
         "datagrid",
+		"data-grid",
+		"grid",
         "datepicker",
         "colorpicker",
         "messagebox",
@@ -36,7 +38,10 @@
 		"select",
 		"textarea",
 		"tiles",
-		"snackbar"
+		"snackbar",
+		"demo",
+		"demo-app"
+		
     ],
   "dependencies": {
     "@angular/common": "~2.1.0",
