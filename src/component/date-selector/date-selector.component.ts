@@ -1,9 +1,11 @@
-import { Component, AfterContentInit, ViewEncapsulation, EventEmitter, Output, Input, forwardRef, ViewChild, ElementRef } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, EventEmitter, forwardRef, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { IDateSelectorItem } from './date-selector-item.model';
+
+import { BooleanFieldValue } from '../../common/core/annotations';
 import { Position } from '../../common/core/graphics';
 import { KeyCodes } from '../../common/core/keycodes.enum';
-import { BooleanFieldValue } from '../../common/core/annotations';
+import { IDateSelectorItem } from './date-selector-item.model';
+
 import { Observable, Subscription } from 'rxjs/Rx';
 import 'rxjs/Rx';
 
@@ -20,22 +22,22 @@ export enum DaysOfWeek {
 const noop = () => { };
 
 const DejaDateSelectorComponentValueAccessor = {
+    multi: true,
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DejaDateSelectorComponent),
-    multi: true,
 };
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    selector: 'deja-date-time-selector',
-    templateUrl: './date-selector.component.html',
-    styleUrls: ['./date-selector.scss'],
     providers: [DejaDateSelectorComponentValueAccessor],
+    selector: 'deja-date-time-selector',
+    styleUrls: ['./date-selector.scss'],
+    templateUrl: './date-selector.component.html',
 })
 export class DejaDateSelectorComponent implements AfterContentInit {
     @Input() @BooleanFieldValue() public time: boolean = false;
     @Input() public startDay: DaysOfWeek = DaysOfWeek.Monday;
-    @Input() public disableDates: (DaysOfWeek | Date)[]; // | ((d: Date) => boolean);
+    @Input() public disableDates: Array<(DaysOfWeek | Date)>; // | ((d: Date) => boolean);
     @Input() public dateMax: Date;
     @Input() public dateMin: Date;
 
@@ -52,11 +54,6 @@ export class DejaDateSelectorComponent implements AfterContentInit {
     // Time
     protected beginOffset = Math.PI / 3;
     protected clocks = {
-        minutes: {
-            ranges: [
-                {min: 0, max: 59, labelInterval: 5},
-            ], 
-        },
         houres: {
             ranges: [
                 {min: 1, max: 12, beginOffset: Math.PI / 3},
@@ -65,6 +62,11 @@ export class DejaDateSelectorComponent implements AfterContentInit {
             replaceValues: [
                 {key: 24, value: 0},
             ],
+        },
+        minutes: {
+            ranges: [
+                {min: 0, max: 59, labelInterval: 5},
+            ], 
         },
     };
     // /Time
@@ -179,17 +181,17 @@ export class DejaDateSelectorComponent implements AfterContentInit {
     }
 
     // ************* ControlValueAccessor Implementation **************
-    // get accessor
-    get value(): Date {
-        return this.selectedDate;
-    };
-
     // set accessor including call the onchange callback
     set value(v: Date) {
         if (v !== this.selectedDate) {
             this.writeValue(v);
             this.onChangeCallback(v);
         }
+    }
+
+    // get accessor
+    get value(): Date {
+        return this.selectedDate;
     }
 
     // From ControlValueAccessor interface
@@ -238,8 +240,8 @@ export class DejaDateSelectorComponent implements AfterContentInit {
         while (date.getDay() !== this.startDay) {
             date = new Date(year, month, --day);
             let dateSelectorItem: IDateSelectorItem = {
-                date: date,
                 background: true,
+                date: date,
             };
             days.splice(0, 0, dateSelectorItem);
         }
@@ -249,8 +251,8 @@ export class DejaDateSelectorComponent implements AfterContentInit {
             date = new Date(year, month, d);
 
             let dateSelectorItem = {
-                date: date,
                 currentDate: (this.currentDate.setHours(0, 0, 0, 0) === date.setHours(0, 0, 0, 0)) ? true : null,
+                date: date,
             };
             days.push(dateSelectorItem);
         }
@@ -261,8 +263,8 @@ export class DejaDateSelectorComponent implements AfterContentInit {
                 break;
             } else {
                 let dateSelectorItem = {
-                    date: date,
                     background: true,
+                    date: date,
                 };
                 days.push(dateSelectorItem);
                 d++;
@@ -300,15 +302,29 @@ export class DejaDateSelectorComponent implements AfterContentInit {
     }
 
     protected updateHours(hours: number) {
-        let d = this.selectedDate ? new Date(this.selectedDate) : new Date();
-        d.setHours(0, 0, 0, 0);
+        let d: Date;
+
+        if (this.selectedDate) {
+            d = new Date(this.selectedDate);
+        } else {
+            d = new Date();
+            d.setHours(0, 0, 0, 0);
+        }
+        
         d.setHours(hours);
         this.value = d;
     }
 
     protected updateMinutes(minutes: number) {
-        let d = this.selectedDate ? new Date(this.selectedDate) : new Date();
-        d.setHours(0, 0, 0, 0);
+        let d: Date;
+        
+        if (this.selectedDate) {
+            d = new Date(this.selectedDate);
+        } else {
+            d = new Date();
+            d.setHours(0, 0, 0, 0);
+        }
+
         d.setMinutes(minutes);
         this.value = d;
     }
