@@ -290,6 +290,13 @@ TODO
 </template>
 ```
 
+  - `loaderTemplate`
+```html
+<template #loaderTemplate>
+	<span>Chargement en cours ...</span>
+</template>
+```
+
 
 ### Exemple
 Un exemple d'utilisation est présent dans l'application test de **deja-angular2**.

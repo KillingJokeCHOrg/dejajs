@@ -20,3 +20,4 @@ export * from "./monaco-editor/index";
 export * from "./message-box/index";
 export * from "./snackbar/index";
 export * from "./range/index";
+export * from "./splitter/index";

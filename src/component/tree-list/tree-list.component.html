@@ -15,7 +15,7 @@
 	<template [ngTemplateOutlet]="headerTemplate"></template>
 </div>
 <div #listcontainer id="list" [style.max-height.px]="maxHeight || null" tabindex="1" (keydown)="filter($event)" (keyup)="filter($event)" [class.hasheader]="headerTemplate" [class.dragover]="_ddStartIndex !== undefined ? _ddStartIndex : null" [attr.keynav]="keyboardNavigation" (dragleave)="sortable ? dragLeave($event): null" (mousedown)="mousedown($event)" [deja-droppable]="getDropContext()">
-	<div id="nodata-holder" *ngIf="!_itemList || _itemList.length === 0">{{ nodataholder }}</div>
+	<div id="nodata-holder" *ngIf="(!_itemList || _itemList.length === 0) && !_isLoading">{{ nodataholder }}</div>
 	<div id="error-hint" *ngIf="_hintLabel">{{ _hintLabel }}</div>
 	<div *ngIf="vpBeforeHeight" [style.height.px]="vpBeforeHeight"></div>
 	<ul ulist [attr.depth-max]="depthMax || null" [attr.vp-rowheight]="_viewPortRowHeight" *ngIf="_itemList && _itemList.length > 0">
@@ -31,4 +31,16 @@
 		</li>
 	</ul>
 	<div *ngIf="vpAfterHeight" [style.height.px]="vpAfterHeight"></div>
+	<!--<div id="loader" *ngIf="_isLoading">
+		<span class="loader-container" *ngIf="!loaderTemplate">
+			<div class="spinner">
+				<div class="bounce1"></div>
+				<div class="bounce2"></div>
+				<div class="bounce3"></div>
+			</div>
+		</span>
+		<span class="loader-container" *ngIf="loaderTemplate">
+			<template [ngTemplateOutlet]="loaderTemplate"></template>
+		</span>
+	</div>-->    
 </div>

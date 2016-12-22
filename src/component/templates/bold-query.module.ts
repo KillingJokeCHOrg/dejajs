@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { DejaBoldQueryComponent } from './index';
 
 @NgModule({
-    declarations: [DejaBoldQueryComponent],
+    declarations: [
+        DejaBoldQueryComponent,
+    ],
     exports: [DejaBoldQueryComponent],
     imports: [
         CommonModule,

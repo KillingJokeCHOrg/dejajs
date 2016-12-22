@@ -56,6 +56,8 @@ export class DejaTreeListComponent extends ItemListBase {
     @Input() public itemTemplateExternal;
     /** Permet de définir un template de ligne parente par binding. */
     @Input() public parentItemTemplateExternal;
+    /** Permet de définir un template pour le loader par binding. */
+    @Input() public loaderTemplateExternal;
     /** Permet de définir un template d'entête de colonne par binding. */
     @Input() public headerTemplateExternal;
     /** Permet de définir un template comme prefixe de la zone de recherche par binding. */
@@ -83,6 +85,7 @@ export class DejaTreeListComponent extends ItemListBase {
 
     @ContentChild('itemTemplate') private itemTemplateInternal;
     @ContentChild('parentItemTemplate') private parentItemTemplateInternal;
+    @ContentChild('loaderTemplate') private loaderTemplateInternal;
     @ContentChild('headerTemplate') private headerTemplateInternal;
     @ContentChild('searchPrefixTemplate') private searchPrefixTemplateInternal;
     @ContentChild('searchSuffixTemplate') private searchSuffixTemplateInternal;
@@ -101,6 +104,8 @@ export class DejaTreeListComponent extends ItemListBase {
 
     private mouseMoveObs: Subscription;
     private mouseUpObs: Subscription;
+
+    private _isLoading: boolean;
 
     constructor(private elementRef: ElementRef, private dragDropService: DragDropService) {
         super();
@@ -281,6 +286,10 @@ export class DejaTreeListComponent extends ItemListBase {
         return this.parentItemTemplateExternal || this.parentItemTemplateInternal;
     }
 
+    private get loaderTemplate() {
+        return this.loaderTemplateExternal || this.loaderTemplateInternal;
+    }
+
     private get headerTemplate() {
         return this.headerTemplateExternal || this.headerTemplateInternal;
     }
@@ -309,6 +318,7 @@ export class DejaTreeListComponent extends ItemListBase {
     public writeValue(items: any) {
         delete this.hintLabel;
         this.waiter = true;
+        this._isLoading = true;
         super.setItems(items).subscribe(() => {
             if (this.minlength > 0 && !this.query) {
                 // Waiting for query
@@ -317,9 +327,11 @@ export class DejaTreeListComponent extends ItemListBase {
                 this.calcViewPort();
             }
             this.waiter = false;
+            this._isLoading = false;
         }, (error: any) => {
             this.hintLabel = error.toString();
             this.waiter = false;
+            this._isLoading = false;
             this._itemList = [];
         });
     }

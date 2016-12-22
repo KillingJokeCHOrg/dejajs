@@ -52,7 +52,7 @@ export class DejaSelectComponent extends ItemListBase implements ControlValueAcc
     /** Permet de définir un template pour l'élément de conseil ou d'affichage d'erreur. */
     @Input() public hintTemplateExternal;
     /** Temps d'attente avant que la recherche dans la liste soit lancée */
-    @Input('delay-serach-trigger') public delaySearchTrigger = 250;
+    @Input('delay-search-trigger') public delaySearchTrigger = 250;
 
     // NgModel implementation
     protected onTouchedCallback: () => void = noop;
@@ -62,7 +62,6 @@ export class DejaSelectComponent extends ItemListBase implements ControlValueAcc
     @ContentChild('itemTemplate') private itemTemplateInternal;
     @ContentChild('parentItemTemplate') private parentItemTemplateInternal;
     @ContentChild('selectedTemplate') private selectedTemplate;
-    @ContentChild('hintTemplate') private mdHint;
     @ContentChild('suffixTemplate') private mdSuffix;
     @ViewChild(MdInput) private inputComponent: MdInput;
     @ViewChildren('dropdownitem') private dropdownItemElements: QueryList<ElementRef>;

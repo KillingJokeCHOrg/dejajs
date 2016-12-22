@@ -20,6 +20,7 @@ import { TextAreaDemo } from '../textarea/textarea-demo';
 import { TilesDemo } from '../tiles/tiles-demo';
 import { DejaTreeListDemo } from '../tree-list/tree-list-demo';
 import { Home } from './home-app';
+import {DejaSplitterDemo} from "../splitter/splitter-demo";
 
 const routes: Routes = [
     { component: Home, path: '' },
@@ -46,6 +47,7 @@ const routes: Routes = [
     }},
     { component: DejaSnackbarDemo, path: 'snackbar' },
     { component: DejaRangeDemo, path: 'range' },
+{ component: DejaSplitterDemo, path: 'splitter' },
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(routes);

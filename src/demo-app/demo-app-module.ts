@@ -28,6 +28,7 @@ import {
     DejaScaleModule,
     DejaSelectModule,
     DejaSnackbarModule,
+    DejaSplitterModule,
     DejaTilesModule,
     DejaTreeListModule,
 } from "../component";
@@ -54,6 +55,7 @@ import { CountriesListService } from "./services/countries-list.service";
 import { CountriesService } from "./services/countries.service";
 import { DrugsService } from "./services/drugs.service";
 import { DejaSnackbarDemo } from "./snackbar/snackbar-demo";
+import { DejaSplitterDemo } from "./splitter/splitter-demo";
 import { TextAreaDemo } from "./textarea/textarea-demo";
 import { TilesDemo } from "./tiles/tiles-demo";
 import { DejaTreeListDemo } from "./tree-list/tree-list-demo";
@@ -79,6 +81,7 @@ import { DejaTreeListDemo } from "./tree-list/tree-list-demo";
         DejaMonacoEditorDemo,
         DejaSnackbarDemo,
         DejaRangeDemo,
+        DejaSplitterDemo,
         ProgressCircleDemo,
     ],
     entryComponents: [
@@ -121,6 +124,7 @@ import { DejaTreeListDemo } from "./tree-list/tree-list-demo";
         DejaMonacoEditorModule,
         DejaSnackbarModule,
         DejaRangeModule,
+        DejaSplitterModule,
         routing,
         GroupingModule,
     ],

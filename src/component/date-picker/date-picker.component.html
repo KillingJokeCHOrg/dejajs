@@ -1,9 +1,9 @@
-<md-input (focus)="toggleDateSelector($event)" id="deja-date-selector" #inputDateSelector [value]="inputModel" placeholder="{{placeholder}}">
+<md-input [disabled]="disabled" (focus)="toggleDateSelector($event)" id="deja-date-selector" #inputDateSelector [value]="inputModel" placeholder="{{placeholder}}">
 	<!--(blur)="updateModel(inputDateSelector.value)"
 -->
 	<div md-suffix>
 		<md-icon *ngIf="!inputModel">date_range</md-icon>
-		<md-icon *ngIf="inputModel" (click)="reset()" id="clear-button">clear</md-icon>
+		<md-icon *ngIf="inputModel && !disabled" (click)="reset()" id="clear-button">clear</md-icon>
 	</div>
 	<md-hint *ngIf="mdHint">
 		<template [ngTemplateOutlet]="mdHint"></template>

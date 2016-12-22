@@ -3,6 +3,47 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ScaleService {
 
+    private _lastHoveredStep: Element;
+    private _svgParent: Element;
+    private _zoomByMouseHoverActivated: boolean;
+
+    /**
+     * Zoom step by event. This results in putting a specific class to simulate the hover effect on a step. Useful when using with drag and drop.
+     * @param $event
+     */
+    public zoomStepByEvent($event) {
+        let zoomableStep = this.getScaleStepByChild(event.target as HTMLElement);
+        if (zoomableStep && zoomableStep !== this._lastHoveredStep) {
+            zoomableStep.classList.add("hover");
+            if (this._lastHoveredStep) {
+                this._lastHoveredStep.classList.remove("hover");
+            }
+            this._lastHoveredStep = zoomableStep;
+            if (!this._svgParent) {
+                this._svgParent = zoomableStep.parentElement;
+                this._zoomByMouseHoverActivated = this._svgParent.classList.contains("zoom");
+            }
+            this._svgParent.classList.add("hover");
+            this._svgParent.classList.add("zoom");
+        }
+    }
+
+    /**
+     * Remove the last hovered step set by zoomStepByEvent.
+     */
+    public removeZoomLastVisitedStep() {
+        if (this._lastHoveredStep) {
+            this._lastHoveredStep.classList.remove("hover");
+            this._lastHoveredStep = null;
+        }
+        if (this._svgParent) {
+            this._svgParent.classList.remove("hover");
+            if (!this._zoomByMouseHoverActivated) {
+                this._svgParent.classList.remove("zoom");
+            }
+        }
+    }
+
     /**
      * Return value of selected step in scale. It can be a main scale step or a zoomable scale step.
      * @param $event

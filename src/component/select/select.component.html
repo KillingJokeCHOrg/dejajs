@@ -13,8 +13,8 @@
 		</ul>
 	</div>
 	<div *ngIf="selectionClearable && !_multiSelect && selectedItems.length > 0" md-suffix><i (click)="removeSelection($event)" id="clear-button" class="material-icons md-suffix">clear</i></div>
-	<md-hint *ngIf="mdHint">
-		<template [ngTemplateOutlet]="mdHint"></template>
+	<md-hint *ngIf="hintTemplate">
+		<template [ngTemplateOutlet]="hintTemplate"></template>
 	</md-hint>
 	<span *ngIf="mdSuffix" md-suffix>
 		<template [ngTemplateOutlet]="mdSuffix"></template>
