@@ -132,9 +132,8 @@ export class DejaRangeDemo {
             const leftWeight = new Weight(weight.minWeight, weight.minWeight + weightDifference / 2);
 
             weight.minWeight = weight.minWeight + weightDifference / 2;
-            const leftWeights = index !== 0 ? this.weights.slice(0, index - 1) : [];
-            const rightWeights = this.weights.slice(index);
-
+            const leftWeights = index !== 0 ? this.weights.slice(0, index) : [];
+            const rightWeights = index < this.weights.length ? this.weights.slice(index + 1) : [];
             this.weights = [...leftWeights, leftWeight, weight, ...rightWeights];
 
             this.weightRef.selected = 0;
@@ -150,7 +149,7 @@ export class DejaRangeDemo {
      * @memberOf DejaRangeDemo
      */
     private increase(): void {
-        this.weights[weights.length - 1].maxWeight++;
+        this.weights[this.weights.length - 1].maxWeight++;
         this.computeRangeFromWeight();
     }
 

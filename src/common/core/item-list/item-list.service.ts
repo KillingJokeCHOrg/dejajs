@@ -697,6 +697,7 @@ export class ItemListService {
         return new Promise<IGroupInfo[]>((resolved?: (value: IGroupInfo[]) => void, rejected?: (reason: any) => void) => {
             this._groupInfos = groupInfos;
             this.invalidateCache();
+            this.ensureChildrenProperties(this._items);
             resolved(groupInfos);
         });
     }
@@ -713,6 +714,7 @@ export class ItemListService {
             }
 
             this.invalidateCache();
+            this.ensureChildrenProperties(this._items);
             resolved(groupInfo);
         });
     }
@@ -1222,8 +1224,8 @@ export class ItemListService {
     private ensureChildrenProperties(items: IItemTree[]) {
         items && items.forEach((item) => {
             let treeItem = item as IItemTree;
-            if (item[this.childrenField]) {
-                treeItem.$items = item[this.childrenField];
+            if (treeItem[this.childrenField]) {
+                treeItem.$items = treeItem[this.childrenField];
                 this.ensureChildrenProperties(treeItem.$items);
             }
         });

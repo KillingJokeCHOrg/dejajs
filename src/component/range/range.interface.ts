@@ -1,4 +1,3 @@
-
 /**
  * IRange interface
  * 

@@ -79,7 +79,7 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
     @Input() public language: IEditorLanguage;
     @Input() public disableAutocomplete: boolean;
 
-    @Input() public nodeModulePath: string = 'node_modules';
+    @Input() public monacoLibPath: string = 'vs/loader.js';
 
     @Input() set valueToCompare(v: string) {
         if (v !== this._valueToCompare) {
@@ -104,14 +104,6 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
                 this.initEditor();
                 return;
             }
-
-            //Si _editor = compare, update model
-            let originalModel = monaco.editor.createModel(this._value, this.language);
-            let modifiedModel = monaco.editor.createModel(this._valueToCompare, this.language);
-            this._editor.setModel({
-                modified: modifiedModel,
-                original: originalModel,
-            });
         }
     }
 
@@ -129,7 +121,7 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
                 return;
             }
 
-            this.initEditor();
+            // this.initEditor();
             this._editor.setValue(this._value);
         }
     }
@@ -152,7 +144,7 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
     public ngAfterViewInit() {
         let onGotAmdLoader = () => {
             // Load monaco
-            (<any> window).require.config({paths: {vs: this.nodeModulePath + '/monaco-editor/min/vs'}});
+            // (<any> window).require.config({paths: {vs: this.monacoLibPath + '/monaco-editor/min/vs'}});
             (<any> window).require(['vs/editor/editor.main'], () => {
                 this.initMonaco();
             });
@@ -162,7 +154,7 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
         if (!(<any> window).require) {
             let loaderScript = document.createElement('script');
             loaderScript.type = 'text/javascript';
-            loaderScript.src = this.nodeModulePath + '/monaco-editor/min/vs/loader.js';
+            loaderScript.src = this.monacoLibPath;
             loaderScript.addEventListener('load', onGotAmdLoader);
             document.body.appendChild(loaderScript);
         } else {
@@ -214,27 +206,6 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
      */
     private initMonaco() {
         this.initEditor();
-
-        // Init Autocomplete if not disabled
-        if (!this.disableAutocomplete) {
-            AutoCompleteSingleton.getInstance().initAutoComplete(this.language);
-        }
-
-        // Trigger on change event for simple editor
-        this.getOriginalModel().onDidChangeContent((e) => {
-            if(e.text === this._value){
-                this.updateValue(this.getOriginalModel().getValue());
-            }
-        });
-
-        // Trigger on change event for diff editor
-        if (this.getModifiedModel()) {
-            this.getModifiedModel().onDidChangeContent((e) => {
-                if(e.text === this._valueToCompare){
-                    this.updateValueToCompare(this.getModifiedModel().getValue());
-                }
-            });
-        }
     }
 
     private initEditor() {
@@ -250,6 +221,29 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
 
         // Manually set monaco size because MonacoEditor doesn't work with Flexbox css
         myDiv.setAttribute('style', `height: ${myDiv.parentElement.offsetHeight}px; width:100%;`);
+
+        // Init Autocomplete if not disabled
+        if (!this.disableAutocomplete) {
+            AutoCompleteSingleton.getInstance().initAutoComplete(this.language);
+        }
+
+        // Trigger on change event for simple editor
+        this.getOriginalModel().onDidChangeContent((e) => {
+            let newVal: string = this.getOriginalModel().getValue();
+            if (this._value !== newVal) {
+                this.updateValue(newVal);
+            }
+        });
+
+        // Trigger on change event for diff editor
+        if (this.getModifiedModel()) {
+            this.getModifiedModel().onDidChangeContent((e) => {
+                let newVal: string = this.getModifiedModel().getValue();
+                if (this._valueToCompare !== newVal) {
+                    this.updateValueToCompare(newVal);
+                }
+            });
+        }
     }
 
     /**
@@ -379,7 +373,7 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
     private getModifiedModel() {
         if (this._editor) {
             let model = this._editor.getModel();
-            return model.modified ? model.modified : model;
+            return model.modified ? model.modified : null;
         }
     }
 }

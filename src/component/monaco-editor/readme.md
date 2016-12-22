@@ -2,9 +2,26 @@
 Monaco Editor est l'éditeur de code utilisé dans [VS Code](https://github.com/Microsoft/vscode).
 Une page décrivant bien les fonctionnalitées de l'éditeur est présente [ici](https://code.visualstudio.com/docs/editor/editingevolved).
 
-### Utilisation 
+### Informations inportantes 
 > Ne pas oublier d'importer le `DejaMonacoEditorModule`dans les `imports` de votre module concerné !
 
+> Ne pas oublier de modifier votre configuration webpack :
+
+```javascript
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+// ...
+plugins: [
+        new CopyWebpackPlugin([{
+            from: 'node_modules/monaco-editor/min/vs',
+            to: 'vs'
+        }])
+    ]
+```
+
+Si le dossier de sortie doit etre modifié (vs enb l'occurence), il est possible de modifier la path dans le composant via 
+l'input : monacoLibPath (Ex: 'mon_path/loader.js')
+
+### Utilisation 
 ```html
 <deja-monaco-editor [(value)]="code" [(valueToCompare)]="codeToCompare" [language]="language"></deja-monaco-editor>
 ```
@@ -84,10 +101,10 @@ export class DejaMonacoEditorDemo implements OnInit {
     <td>Exécuté lors d'une modification de la valeur de "valueToCompare"</td>
 </tr>
 <tr>
-    <td>nodeModulePath</td>
-    <td>'node_modules' (Par défaut à la racine)</td>
+    <td>monacoLibPath</td>
+    <td>'vs/loader.js')</td>
     <td>String</td>
-    <td>Chemin absolu vers le dossier node_modules. Permet de modifier le path du dossier node module si celui-ci n'est pas à la racine. Ex: Si votre dossier node_module est dans un sous dossier "mon-app", il faut saisir : 'mon-app/node_modules'. Cela indique au composant de charger la lib dans http://MONSERVER:PORT/mon-app/node_modules/monaco-editor/min/vs/loader.js</td>
+    <td>Chemin vers le loader.js situé dans la librairie Monaco Editor. Permet de modifier le path de la lib en fonction de votre configuration Webpack.</td>
 </tr>
 </table>
 

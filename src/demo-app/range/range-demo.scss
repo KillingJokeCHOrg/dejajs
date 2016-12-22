@@ -1,35 +1,47 @@
 :host {
-    // for demo purpose only
+    /* for demo purpose only*/
     #custom-range-actions {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
+        -ms-flex-pack: distribute;
         justify-content: space-around;
     }
     h3 {
         margin-top: 24px;
     }
-    // copy the styles below if you want to use custom demo as is
+    /* copy the styles below if you want to use custom demo as is*/
     #custom-range {
         @import "../../scss/variables/_colors.scss";
         $deep: '/deep/';
-        // change the height of the component using this variable only
+        /* change the height of the component using this variable only*/
         $height: 24px;
         #{$deep} {
+            -ms-flex-preferred-size: max-content;
             flex-basis: max-content;
+            -ms-flex-item-align: center;
+            -ms-grid-row-align: center;
             align-self: center;
             height: $height;
         }
         .custom-range {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -ms-flex-item-align: center;
             align-self: center;
             font-size: 10pt;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
         }
-        // don't mess with the custom-seprator styling if you want to use the svg separator as is
+        /* don't mess with the custom-seprator styling if you want to use the svg separator as is*/
         .custom-separator {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
             width: 10px;
+            -ms-flex-wrap: wrap;
             flex-wrap: wrap;
             $triangle-height: 5px;
             svg.triangle {

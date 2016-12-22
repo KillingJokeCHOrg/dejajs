@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { DejaScaleComponent, DejaScaleZoomFactorDirective } from "./index";
+import {ModuleWithProviders, NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
+import { DejaScaleComponent, DejaScaleZoomFactorDirective, ScaleService } from "./index";
 
 @NgModule({
     declarations: [DejaScaleZoomFactorDirective, DejaScaleComponent],
@@ -10,5 +10,13 @@ import { NgModule } from '@angular/core';
         CommonModule,
         FormsModule,
     ],
+    providers: [ScaleService],
 })
-export class DejaScaleModule { }
+export class DejaScaleModule {
+    public static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: DejaScaleModule,
+            providers: [ScaleService],
+        };
+    }
+}

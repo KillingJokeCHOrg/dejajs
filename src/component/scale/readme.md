@@ -111,7 +111,7 @@ Composant pour afficher une échelle avec des valeurs paramétrables.
 	<td>labels</td>
 	<td>IScale[]</td>
 	<td></td>
-	<td>Libellés métier avec leurs respectifs éléments <i>zoomés</i> pour remplacer ceux par défaut (0,1,2,etc)</td>
+	<td>Libellés métier avec leurs respectifs éléments <i>zoomés</i> pour remplacer ceux par défaut (0,1,2,etc); Le nombre d'éléments doit correspondre au nombre de pas défini par le paremètre <i>steps</i></td>
 </tr>
 </table>
 

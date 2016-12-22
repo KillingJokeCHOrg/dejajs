@@ -1,10 +1,11 @@
 import {
     Component, ElementRef, EventEmitter, forwardRef, HostListener, Input,
-    OnChanges, OnInit, Output, Renderer, SimpleChanges,
+    OnChanges, OnInit, Output, SimpleChanges,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Observable, Subscription } from 'rxjs/Rx';
 import { ValueAccessor } from "../../common/core/ngmodel/value-accessor";
+import { ScaleService } from "./index";
 
 const DejaScaleComponentValueAccessor = {
     multi: true,
@@ -60,7 +61,7 @@ export class DejaScaleComponent extends ValueAccessor implements OnInit, OnChang
     private _onInit = false as boolean;
     @Input() private  toDelete: boolean;
 
-    constructor(private _elementRef: ElementRef, private _renderer: Renderer) {
+    constructor(private _elementRef: ElementRef, private _service: ScaleService) {
         super();
     }
 
@@ -131,13 +132,7 @@ export class DejaScaleComponent extends ValueAccessor implements OnInit, OnChang
 
     @HostListener('mouseup', ['$event'])
     protected onMouseUp($event) {
-        let target: HTMLElement = $event.target;
-        let svg: HTMLElement = target.parentElement;
-        if ((target.tagName === 'rect' || target.tagName === 'text') && svg) {
-            this.selectedValue.emit(svg.getAttribute("data-value"));
-        } else {
-            this.selectedValue.emit(target.getAttribute("data-value"));
-        }
+        this.selectedValue.emit(this._service.getStepValueByEvent($event));
     }
 
     private set mouseMove(value: boolean) {

@@ -62,7 +62,7 @@
                         width: 100%;
                         cursor: pointer;
 
-                        &.marker {
+                        &.scale-zoom-marker {
                             height: 0%;
                             width: 5px;
                         }
@@ -133,7 +133,7 @@
                         height: 100%;
                         cursor: pointer;
 
-                        &.marker {
+                        &.scale-zoom-marker {
                             width: 0%;
                             height: 5px;
                         }
@@ -190,7 +190,7 @@
         pointer-events: none;
         > svg {
             pointer-events: auto;
-            &:hover {
+            &:hover, &.hover {
                 transition: height 0.5s 0.5s, width 0.5s 0.5s;
                 overflow: visible;
 
@@ -206,7 +206,7 @@
                         width: 100%;
                         transition: height 0.5s 0.5s, width 0.5s 0.5s, fill 0.1s 0.5s;
 
-                        &.marker {
+                        &.scale-zoom-marker {
                             fill: #ddd;
                             height: 8%;
                             width: 10px;
@@ -218,7 +218,8 @@
                     }
                 }
             }
-            &:not(:hover) {
+
+            &:not(:hover):not(.hover) {
                 transition: height 0.5s 0.5s, width 0.5s 0.5s;
                 rect {
                     transition: fill 0.5s 0.6s;
@@ -236,20 +237,26 @@
         }
 
         &:hover > svg.label-display > text {opacity: 0.3; transition: opacity 0.5s 0.5s;}
+        &.hover > svg.label-display > text {opacity: 0.3; transition: opacity 0.5s 0.5s;}
         &:not(:hover) > svg.label-display > text {transition: opacity 0.5s 0.5s;}
+        &:not(.hover) > svg.label-display > text {transition: opacity 0.5s 0.5s;}
     }
 
     &:not(.horizontal) .zoom {
-        > svg:hover svg rect.marker {
-            height: 8%;
-            width: 10px;
+        > svg:hover, > svg.hover {
+            svg rect.scale-zoom-marker {
+                height: 8%;
+                width: 10px;
+            }
         }
     }
 
     &.horizontal .zoom {
-        > svg:hover svg rect.marker {
-            width: 1px;
-            height: 10px;
+        > svg:hover, > svg.hover {
+            svg rect.scale-zoom-marker {
+                width: 1px;
+                height: 10px;
+            }
         }
     }
 }
@@ -263,6 +270,16 @@
     .zoom.zoom-70 > svg:hover {height: 70%;}
     .zoom.zoom-80 > svg:hover {height: 80%;}
     .zoom.zoom-90 > svg:hover {height: 90%;}
+
+    .zoom.zoom-10 > svg.hover {height: 10%;}
+    .zoom.zoom-20 > svg.hover {height: 20%;}
+    .zoom.zoom-30 > svg.hover {height: 30%;}
+    .zoom.zoom-40 > svg.hover {height: 40%;}
+    .zoom.zoom-50 > svg.hover {height: 50%;}
+    .zoom.zoom-60 > svg.hover {height: 60%;}
+    .zoom.zoom-70 > svg.hover {height: 70%;}
+    .zoom.zoom-80 > svg.hover {height: 80%;}
+    .zoom.zoom-90 > svg.hover {height: 90%;}
 }
 
 .horizontal {
@@ -275,4 +292,14 @@
     .zoom.zoom-70 > svg:hover {width: 70%;}
     .zoom.zoom-80 > svg:hover {width: 80%;}
     .zoom.zoom-90 > svg:hover {width: 90%;}
+
+    .zoom.zoom-10 > svg.hover {width: 10%;}
+    .zoom.zoom-20 > svg.hover {width: 20%;}
+    .zoom.zoom-30 > svg.hover {width: 30%;}
+    .zoom.zoom-40 > svg.hover {width: 40%;}
+    .zoom.zoom-50 > svg.hover {width: 50%;}
+    .zoom.zoom-60 > svg.hover {width: 60%;}
+    .zoom.zoom-70 > svg.hover {width: 70%;}
+    .zoom.zoom-80 > svg.hover {width: 80%;}
+    .zoom.zoom-90 > svg.hover {width: 90%;}
 }
