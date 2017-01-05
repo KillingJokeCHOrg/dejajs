@@ -340,6 +340,13 @@ export class ItemListBase {
         this.calcViewPort();
     }
 
+    /** Efface le viewport */
+    public clearViewPort() {
+        this.vpBeforeHeight = 0;
+        this.vpAfterHeight = 0;
+        this._itemList = [];
+    };
+
     /** Retrouve les informations du parent de l'élément spécifié
      * @param {IItemTree} item Element enfant du parent à retrouver.
      * @return {Promise<IParentListInfoResult>} Promesse résolue par la fonction, qui retourne les informations sur le parent de l'élément spécifié
@@ -544,13 +551,6 @@ export class ItemListBase {
         } as IItemTreeInfo;
     }
 
-    /** Efface le viewport */
-    protected clearViewPort() {
-        this.vpBeforeHeight = 0;
-        this.vpAfterHeight = 0;
-        this._itemList = [];
-    };
-
     /** Charge le viewport */
     protected loadViewPort(res: IViewListResult) {
         return new Promise<IViewListResult>((resolved?: (value: IViewListResult) => void, rejected?: (reason: any) => void) => {
@@ -591,12 +591,31 @@ export class ItemListBase {
                 }
             };
 
+            let containerHeight = this.computedMaxHeight || maxHeight || containerElement.clientHeight;
+            // TODO -> default view port row height
+            if (containerHeight <= this._viewPortRowHeight) {
+                // Set the viewlist to the maximum haight to measure the real max-height defined in the css
+                maxHeight = 200000;
+                // Use a blank div to do that
+                this.vpAfterHeight = maxHeight;
+                // Wait next life cycle for the result
+                setTimeout(() => {
+                    this.computedMaxHeight = containerElement.clientHeight;
+                    this.calcViewPort(query, this.computedMaxHeight, containerElement);
+                }, 0);
+            } else {
             if (this._viewPortRowHeight === 0) {
+                    let visibleList = this.getViewList(query);
+                    // Calculer ces valeurs
                 this.vpBeforeHeight = 0;
                 this.vpAfterHeight = 0;
-                loadViewPort(this.getViewList(query));
+                    // Restreindre cette liste
+                    let viewList = visibleList;
+                    loadViewPort(viewList);
+
+
             } else {
-                let loadViewList = (containerHeight: number) => {
+                    let loadViewList = () => {
                     let scrollPos = containerHeight ? containerElement.scrollTop : 0;
                     let maxCount = Math.ceil(containerHeight / this._viewPortRowHeight);
                     let startRow = Math.floor(scrollPos / this._viewPortRowHeight);
@@ -608,19 +627,7 @@ export class ItemListBase {
                     loadViewPort(this.getViewList(query, startRow, maxCount));
                 };
 
-                let containerHeight = this.computedMaxHeight || maxHeight || containerElement.clientHeight;
-                if (containerHeight <= this._viewPortRowHeight) {
-                    // Set the viewlist to the maximum haight to measure the real max-height defined in the css
-                    maxHeight = 200000;
-                    // Use a blank div to do that
-                    this.vpAfterHeight = maxHeight;
-                    // Wait next life cycle for the result
-                    setTimeout(() => {
-                        this.computedMaxHeight = containerElement.clientHeight;
-                        this.calcViewPort(query, this.computedMaxHeight, containerElement);
-                    }, 0);
-                } else {
-                    loadViewList(containerHeight);
+                    loadViewList();
                 }
             }
         });

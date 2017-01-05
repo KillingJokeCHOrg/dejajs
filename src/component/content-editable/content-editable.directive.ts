@@ -1,8 +1,9 @@
 import { Directive, ElementRef, forwardRef, HostBinding, HostListener, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { coerceBooleanProperty } from '@angular/material/core/coercion/boolean-property';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { clearTimeout, setTimeout } from 'timers';
-import { BooleanFieldValue, KeyCodes } from "../../common/core/index";
+import { KeyCodes } from "../../common/core/index";
 
 const noop = () => { };
 
@@ -17,15 +18,11 @@ const DejaEditableDirectiveValueAccessor = {
     selector: '[deja-editable]',
 })
 export class DejaEditableDirective implements ControlValueAccessor {
-    /** Retourne ou définit une valeur indiquant si le contenu édité est multiligne */
-    @Input() @BooleanFieldValue() public multiline = false;
-
-    /** Retourne ou définit une valeur indiquant si le contenu édité est obligatoire. Si la valeur est 'true' la sortie du mode édition ne sera pas possible tant qu'un contenu n'est pas ajouté. */
-    @Input() @BooleanFieldValue() public mandatory = false;
-
     @HostBinding('attr.contenteditable') protected _inEdition = false;
     @HostBinding('attr.content') protected model: string;
     private _editMode = false;
+    private _mandatory = false;
+    private _multiline = false;
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
     private globalClickObs: Subscription;
@@ -34,10 +31,32 @@ export class DejaEditableDirective implements ControlValueAccessor {
     constructor(private elementRef: ElementRef) {
     }
 
+    /** Définit une valeur indiquant si le contenu édité est obligatoire. Si la valeur est 'true' la sortie du mode édition ne sera pas possible tant qu'un contenu n'est pas ajouté. */
+    @Input()
+    public set mandatory(value: boolean) {
+        this._mandatory = coerceBooleanProperty(value);
+    }
+
+    /** Retourne une valeur indiquant si le contenu édité est obligatoire. Si la valeur est 'true' la sortie du mode édition ne sera pas possible tant qu'un contenu n'est pas ajouté. */
+    public get mandatory() { 
+        return this._mandatory;
+    }
+
+    /** Définit une valeur indiquant si le contenu édité est multiligne */
+    @Input()
+    public set multiline(value: boolean) {
+        this._multiline = coerceBooleanProperty(value);
+    }
+
+    /** Retourne une valeur indiquant si le contenu édité est multiligne */
+    public get multiline() { 
+        return this._multiline;
+    }
+    
     /** Définit une valeur indiquant si l'édition est activée. */
-    @Input('deja-editable') @BooleanFieldValue()
+    @Input('deja-editable')
     public set editMode(value: boolean) {
-        this._editMode = value;
+        this._editMode = coerceBooleanProperty(value);
     }
 
     /** Retourne une valeur indiquant si l'édition est activée. */
@@ -46,11 +65,11 @@ export class DejaEditableDirective implements ControlValueAccessor {
     }
 
     /** Définit une valeur indiquant si l'élément est en édition. */    
-    @Input() @BooleanFieldValue()
+    @Input()
     public set inEdition(value: boolean) {
-        this._inEdition = value;
-        this.globalClick = value;
-        this.keydown = value;
+        this._inEdition = coerceBooleanProperty(value);
+        this.globalClick = this._inEdition;
+        this.keydown = this._inEdition;
     }
 
     /** Retourne une valeur indiquant si l'élément est en édition. */

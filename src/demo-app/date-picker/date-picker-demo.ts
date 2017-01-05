@@ -6,9 +6,8 @@ import { Component, OnInit } from '@angular/core';
     templateUrl: './date-picker-demo.html',
 })
 export class DejaDatePickerDemo implements OnInit {
-    public toto = new Date();
-    public tutu = 3;
-    public test = [0, 6, new Date(2016, 9, 12)];
+    public theDate = new Date();
+    public disabledDate = [0, 6, new Date(2016, 9, 12)];
 
     constructor() { }
 

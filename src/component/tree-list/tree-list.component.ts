@@ -1,9 +1,8 @@
 import { Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, Output, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { MdInput } from "@angular/material";
+import { coerceBooleanProperty } from '@angular/material/core/coercion/boolean-property';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { clearTimeout, setTimeout } from 'timers';
-import { BooleanFieldValue } from '../../common/core/annotations';
 import { Position, Rect } from '../../common/core/graphics';
 import { GroupingService } from '../../common/core/grouping';
 import { IItemBase, IItemTree, ItemListBase, ItemListService, IViewListResult } from '../../common/core/item-list';
@@ -44,14 +43,6 @@ export class DejaTreeListComponent extends ItemListBase {
      * Spécifier 0 pour que le composant determine sa hauteur à partir du container
      */
     @Input() public maxHeight = 0;
-    /** Affiche un barre de recherche au dessus de la liste. */
-    @Input() @BooleanFieldValue() public searchArea = false;
-    /** Affiche un bouton pour réduire ou étendre toutes les lignes parentes du tableau */
-    @Input() @BooleanFieldValue() public expandButton = false;
-    /** Permet de trier la liste au clic sur l'entête */
-    @Input() @BooleanFieldValue() public sortable = false;
-    /** Rend les lignes de la liste draggable vers un autre composant (ne pas confondre avec la propriété `sortable`) */
-    @Input() @BooleanFieldValue() public itemsDraggable = false;
     /** Permet de définir un template de ligne par binding */
     @Input() public itemTemplateExternal;
     /** Permet de définir un template de ligne parente par binding. */
@@ -101,6 +92,10 @@ export class DejaTreeListComponent extends ItemListBase {
     private completeTimer: NodeJS.Timer;
     private scrollTimeout: NodeJS.Timer;
     private lastScrollTop = 0;
+    private _searchArea = false;
+    private _expandButton = false;
+    private _sortable = false;
+    private _itemsDraggable = false;
 
     private mouseMoveObs: Subscription;
     private mouseUpObs: Subscription;
@@ -111,6 +106,46 @@ export class DejaTreeListComponent extends ItemListBase {
         super();
     }
 
+    /** Affiche un barre de recherche au dessus de la liste. */    
+    @Input()
+    public set searchArea(value: boolean) {
+        this._searchArea = coerceBooleanProperty(value);
+    }
+
+    public get searchArea() {
+        return this._searchArea;
+    }
+
+    /** Affiche un bouton pour réduire ou étendre toutes les lignes parentes du tableau */
+    @Input()
+    public set expandButton(value: boolean) {
+        this._expandButton = coerceBooleanProperty(value);
+    }
+
+    public get expandButton() {
+        return this._expandButton;
+    }
+
+    /** Permet de trier la liste au clic sur l'entête */
+    @Input()
+    public set sortable(value: boolean) {
+        this._sortable = coerceBooleanProperty(value);
+    }
+
+    public get sortable() {
+        return this._sortable;
+    }
+
+    /** Rend les lignes de la liste draggable vers un autre composant (ne pas confondre avec la propriété `sortable`) */
+    @Input()
+    public set itemsDraggable(value: boolean) {
+        this._itemsDraggable = coerceBooleanProperty(value);
+    }
+
+    public get itemsDraggable() {
+        return this._itemsDraggable;
+    }
+    
     @Input()
     /** Définit le nombre de lignes à sauter en cas de pression sur les touches PageUp ou PageDown */
     public set pageSize(value: number) {
@@ -207,9 +242,9 @@ export class DejaTreeListComponent extends ItemListBase {
     }
 
     /** Définit une valeur indiquant si plusieurs lignes peuvent être sélectionées. */
-    @Input() @BooleanFieldValue()
+    @Input()
     public set multiSelect(value: boolean) {
-        super.setMultiSelect(value !== false);
+        super.setMultiSelect(coerceBooleanProperty(value) !== false);
     }
 
     /** Retourne une valeur indiquant si plusieurs lignes peuvent être sélectionées. */

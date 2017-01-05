@@ -1,13 +1,11 @@
 import { AfterContentInit, Component, ElementRef, EventEmitter, forwardRef, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-
-import { BooleanFieldValue } from '../../common/core/annotations';
+import { coerceBooleanProperty } from '@angular/material/core/coercion/boolean-property';
+import 'rxjs/Rx';
+import { Observable, Subscription } from 'rxjs/Rx';
 import { Position } from '../../common/core/graphics';
 import { KeyCodes } from '../../common/core/keycodes.enum';
 import { IDateSelectorItem } from './date-selector-item.model';
-
-import { Observable, Subscription } from 'rxjs/Rx';
-import 'rxjs/Rx';
 
 export enum DaysOfWeek {
     Sunday = 0,
@@ -35,7 +33,6 @@ const DejaDateSelectorComponentValueAccessor = {
     templateUrl: './date-selector.component.html',
 })
 export class DejaDateSelectorComponent implements AfterContentInit {
-    @Input() @BooleanFieldValue() public time: boolean = false;
     @Input() public startDay: DaysOfWeek = DaysOfWeek.Monday;
     @Input() public disableDates: Array<(DaysOfWeek | Date)>; // | ((d: Date) => boolean);
     @Input() public dateMax: Date;
@@ -82,15 +79,25 @@ export class DejaDateSelectorComponent implements AfterContentInit {
 
     private days = [];
     private emptyDays: any[];
+    private _time: boolean = false;
 
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
 
-    get keyboardNavigation() {
+    @Input() 
+    public set time(value: boolean) { 
+        this._time = coerceBooleanProperty(value);
+    }
+    
+    public get time() { 
+        return this._time;
+    }
+    
+    public get keyboardNavigation() {
         return this._keyboardNavigation;
     }
 
-    set keyboardNavigation(value: boolean) {
+    public set keyboardNavigation(value: boolean) {
         this._keyboardNavigation = value;
         if (value) {
             if (this.mouseMoveObs) {

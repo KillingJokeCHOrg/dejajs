@@ -1,8 +1,8 @@
 import { Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, Output, SimpleChange } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { coerceBooleanProperty } from '@angular/material/core/coercion/boolean-property';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { clearTimeout, setTimeout } from 'timers';
-import { BooleanFieldValue } from '../../common/core/annotations';
 import { Position, Rect } from '../../common/core/graphics';
 import { DejaTileSelectionChangedEvent, IDejaTile, IDejaTileEvent, IDejaTileList } from './index';
 import { DejaTilesLayoutProvider } from './tiles-layout.provider';
@@ -65,11 +65,11 @@ export class DejaTilesComponent implements ControlValueAccessor {
     constructor(private el: ElementRef) {
     }
 
-    @Input() @BooleanFieldValue()
+    @Input()
     set designMode(value: boolean) {
-        this._designMode = value;
-        this.mouseMove = value;        
-        if (value) {
+        this._designMode = coerceBooleanProperty(value);
+        this.mouseMove = this._designMode;
+        if (this._designMode) {
             this.globalMouseMove = false;
         } else { 
             // Ensure no resizing cursor in readonly mode
@@ -186,6 +186,22 @@ export class DejaTilesComponent implements ControlValueAccessor {
             this.ensureIds();
             this.layoutProvider.refreshTiles(this.tiles, this.el.nativeElement.clientWidth);
         }
+    }
+
+    public getFreePlace(pageX: number, pageY: number, width: number, height: number) {
+        if (!this.tiles || this.tiles.length === 0) {
+            return new Rect(0, 0, width, height);
+        }
+
+        // Check if we drag on a tile
+        let containerElement = this.el.nativeElement as HTMLElement;
+        let containerBounds = containerElement.getBoundingClientRect();
+
+        pageX -= containerBounds.left;
+        pageY -= containerBounds.top;
+
+        let minSize = this.layoutProvider.getTileMinPixelSize();        
+        let tile = this.layoutProvider.HitTest(this.tiles, new Rect(pageX, pageY, minSize.width, minSize.height));
     }
 
     protected ngOnChanges(changes: { [propKey: string]: SimpleChange }) {

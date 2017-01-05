@@ -1,8 +1,8 @@
 import { Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { coerceBooleanProperty } from '@angular/material/core/coercion/boolean-property';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { clearTimeout, setTimeout } from 'timers';
-import { BooleanFieldValue } from '../../common/core/annotations';
 import { GroupingService, IGroupInfo } from '../../common/core/grouping';
 import { IItemBase, IItemTree, ItemListBase, ItemListService } from '../../common/core/item-list';
 import { KeyCodes } from "../../common/core/keycodes.enum";
@@ -81,27 +81,6 @@ export class DejaGridComponent {
     @Input() public searchPrefixTemplateExternal;
     /** Permet de définir un template comme suffixe de la zone de recherche par binding. */
     @Input() public searchSuffixTemplateExternal;
-    /** Permet de trier le tableau au clic sur l'entête de la colonne */
-    @Input() @BooleanFieldValue() public sortable = false;             
-    /** Affiche un barre de recherche au dessus du tableau. */
-    @Input() @BooleanFieldValue() public searchArea = false;      
-    /** Affiche une zone de regroupement des colonnes par drag and drop. */
-    @Input() @BooleanFieldValue() public groupArea = false;             
-    /** Affiche un bouton pour réduire ou étendre toutes les lignes parentes du tableau */
-    @Input() @BooleanFieldValue() public expandButton = false;          
-    /** Rend les lignes du tableau draggable vers un autre composant (ne pas confondre avec la propriété `sortable`) */
-    @Input() @BooleanFieldValue() public rowsDraggable = false;        
-    /** Rend les lignes du tableau triables par drag-and-drop */
-    @Input() @BooleanFieldValue() public rowsSortable = false;
-    /** Définit si toutes les colonnes peuvent être draggable vers un autre composant. */
-    @Input() @BooleanFieldValue() public columnsDraggable = false;    
-    /** Définit si toutes les colonnes peuvent être déplacées parmis les autres colonnes. */
-    @Input() @BooleanFieldValue() public columnsSortable = false;     
-    /** Permet de redimensionner manuellement les colonnes du tableau. */
-    @Input() @BooleanFieldValue() public columnsSizable = false;       
-    /** Permet la sélection multiple des ligne de la grille (avec la touche shift ou ctrl) */
-    @Input() @BooleanFieldValue() public multiSelect = false;   
-    
     /** Exécuté lorsque le déplacement d'une ligne est terminée. */
     @Output() public itemDragEnd = new EventEmitter<IDejaDragEvent>();
     /** Exécuté lorsque le déplacement d'une ligne commence. */
@@ -137,7 +116,116 @@ export class DejaGridComponent {
     private columnsLayoutInfos: DejaGridColumnsLayoutInfos;
     private mouseUpObs: Subscription;
     private resizeObs: Subscription;
+    private _sortable = false;             
+    private _searchArea = false;      
+    private _groupArea = false;             
+    private _expandButton = false;          
+    private _rowsDraggable = false;        
+    private _rowsSortable = false;
+    private _columnsDraggable = false;    
+    private _columnsSortable = false;     
+    private _columnsSizable = false;       
+    private _multiSelect = false;   
 
+    /** Permet de trier le tableau au clic sur l'entête de la colonne */
+    @Input() 
+    public set sortable(value: boolean) { 
+        this._sortable = coerceBooleanProperty(value);
+    }
+    
+    public get sortable() { 
+        return this._sortable;
+    }
+
+    /** Affiche un barre de recherche au dessus du tableau. */
+    @Input() 
+    public set searchArea(value: boolean) { 
+        this._searchArea = coerceBooleanProperty(value);
+    }
+    
+    public get searchArea() { 
+        return this._searchArea;
+    }
+
+    /** Affiche une zone de regroupement des colonnes par drag and drop. */
+    @Input() 
+    public set groupArea(value: boolean) { 
+        this._groupArea = coerceBooleanProperty(value);
+    }
+    
+    public get groupArea() { 
+        return this._groupArea;
+    }
+
+    /** Affiche un bouton pour réduire ou étendre toutes les lignes parentes du tableau */
+    @Input() 
+    public set expandButton (value: boolean) { 
+        this._expandButton  = coerceBooleanProperty(value);
+    }
+    
+    public get expandButton () { 
+        return this._expandButton ;
+    }
+
+    /** Rend les lignes du tableau draggable vers un autre composant (ne pas confondre avec la propriété `sortable`) */
+    @Input() 
+    public set rowsDraggable(value: boolean) { 
+        this._rowsDraggable = coerceBooleanProperty(value);
+    }
+    
+    public get rowsDraggable() { 
+        return this._rowsDraggable;
+    }
+
+    /** Rend les lignes du tableau triables par drag-and-drop */
+    @Input() 
+    public set rowsSortable(value: boolean) { 
+        this._rowsSortable = coerceBooleanProperty(value);
+    }
+    
+    public get rowsSortable() { 
+        return this._rowsSortable;
+    }
+
+    /** Définit si toutes les colonnes peuvent être draggable vers un autre composant. */
+    @Input() 
+    public set columnsDraggable(value: boolean) { 
+        this._columnsDraggable = coerceBooleanProperty(value);
+    }
+    
+    public get columnsDraggable() { 
+        return this._columnsDraggable;
+    }
+
+    /** Définit si toutes les colonnes peuvent être déplacées parmis les autres colonnes. */
+    @Input() 
+    public set columnsSortable(value: boolean) { 
+        this._columnsSortable = coerceBooleanProperty(value);
+    }
+    
+    public get columnsSortable() { 
+        return this._columnsSortable;
+    }
+
+    /** Permet de redimensionner manuellement les colonnes du tableau. */
+        @Input() 
+    public set columnsSizable(value: boolean) { 
+        this._columnsSizable = coerceBooleanProperty(value);
+    }
+    
+    public get columnsSizable() { 
+        return this._columnsSizable;
+        }
+    
+    /** Permet la sélection multiple des ligne de la grille (avec la touche shift ou ctrl) */
+    @Input() 
+    public set multiSelect(value: boolean) { 
+        this._multiSelect = coerceBooleanProperty(value);
+    }
+    
+    public get multiSelect() { 
+        return this._multiSelect;
+    }
 
     @Input()
     /** Définit la structure des colonnes de la grille. */    
@@ -286,6 +374,11 @@ export class DejaGridComponent {
     /** Nettoye les caches et réaffiche le viewport. */
     public refresh() {
         this.treeListComponent && this.treeListComponent.refresh();
+    }
+
+    /** Efface le viewport */
+    public clearViewPort() {
+        this.treeListComponent && this.treeListComponent.clearViewPort();
     }
 
     /** Calcul la position de la scrollbar horizontale pour que la colonne spéfiée soit dans la zone visible. */

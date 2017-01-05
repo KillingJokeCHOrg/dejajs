@@ -1,22 +1,22 @@
-/deep/ md-progress-circle.primary {
+/deep/ md-progress-spinner.primary {
     path {
         stroke: $primary;
     }
 }
 
-/deep/ md-progress-circle.danger {
+/deep/ md-progress-spinner.danger {
     path {
         stroke: $red;
     }
 }
 
-/deep/ md-progress-circle.warn {
+/deep/ md-progress-spinner.warn {
     path {
         stroke: $warning;
     }
 }
 
-/deep/ md-progress-circle.success {
+/deep/ md-progress-spinner.success {
     path {
         stroke: $success;
     }

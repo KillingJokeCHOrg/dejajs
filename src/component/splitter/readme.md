@@ -8,11 +8,11 @@ Le composant splitter permet de découper horizontalement ou verticalement, un c
 
 ####Splitter horizontal
 ```html
-<deja-splitter direction="horizontal">
-    <split-area size="50">
+<deja-splitter [direction]="'horizontal'">
+    <split-area [size]="50">
         <p>Lorem ipsum dolor sit amet...</p>
     </split-area>
-    <split-area size="50">
+    <split-area [size]="50">
         <p>Sed ut perspiciatis unde omnis iste natus erro...</p>
     </split-area>
 </deja-splitter>
@@ -20,11 +20,11 @@ Le composant splitter permet de découper horizontalement ou verticalement, un c
 
 ####Splitter vertical
 ```html
-<deja-splitter direction="vertical">
-    <split-area size="25">
+<deja-splitter [direction]="'vertical'">
+    <split-area [size]="25">
         <p>Lorem ipsum dolor sit amet...</p>
     </split-area>
-    <split-area size="75">
+    <split-area [size]="75">
         <p>Sed ut perspiciatis unde omnis iste natus erro...</p>
     </split-area>
 </deja-splitter>
@@ -32,26 +32,26 @@ Le composant splitter permet de découper horizontalement ou verticalement, un c
 
 ####Splitter multiple
 ```html
-<deja-splitter direction="horizontal">
-    <split-area size="40">
-        <deja-splitter direction="vertical">
-            <split-area size="30">
+<deja-splitter [direction]="'horizontal'">
+    <split-area [size]="40">
+        <deja-splitter [direction]="'vertical'">
+            <split-area [size]="30">
                 <p>Lorem ipsum dolor sit amet...</p>
             </split-area>
-            <split-area size="40">
+            <split-area [size]="40">
                 <p>Sed ut perspiciatis unde omnis iste natus erro...</p>
             </split-area>
-            <split-area size="30">
+            <split-area [size]="30">
                 <p>Lorem ipsum dolor sit amet...</p>
             </split-area>
         </deja-splitter>
     </split-area>
-    <split-area size="60">
-        <deja-splitter direction="vertical">
-            <split-area size="50">
+    <split-area [size]="60">
+        <deja-splitter [direction]="'vertical'">
+            <split-area [size]="50">
                 <p>Lorem ipsum dolor sit amet...</p>
             </split-area>
-            <split-area size="50">
+            <split-area [size]="50">
                 <p>Sed ut perspiciatis unde omnis iste natus erro...</p>
             </split-area>
         </deja-splitter>

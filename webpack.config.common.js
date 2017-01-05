@@ -1,5 +1,6 @@
 var webpack = require("webpack");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var path = require("path");
 
 module.exports = {
@@ -51,6 +52,10 @@ module.exports = {
 			// The (\\|\/) piece accounts for path separators in *nix and Windows
 			/angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
 			"./src"),
+        new CopyWebpackPlugin([{
+            from: 'node_modules/monaco-editor/min/vs',
+            to: 'vs'
+        }])
 	],
 	resolve: {
 		extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".css", ".html"],

@@ -1,7 +1,7 @@
 import { Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { coerceBooleanProperty } from '@angular/material/core/coercion/boolean-property';
 import { Observable } from 'rxjs/Rx';
-import { BooleanFieldValue } from '../../common/core/annotations';
 import { IRange, IRangeEvent, IStepRangeEvent, Range } from './range.interface';
 
 @Component({
@@ -15,9 +15,6 @@ import { IRange, IRangeEvent, IStepRangeEvent, Range } from './range.interface';
     templateUrl: './range.component.html',
 })
 export class DejaRangeComponent implements ControlValueAccessor {
-
-    // read / write mode 
-    @Input() @BooleanFieldValue() public readOnly: boolean = true;
     // step can be either a numeric value, an array of accepted intervals or a function returning the next accepted interval
     @Input() public step: number | number[] | ((event: IStepRangeEvent) => number) = 1;
     // index of the selected range
@@ -32,18 +29,30 @@ export class DejaRangeComponent implements ControlValueAccessor {
     // minimum range percentage, used to avoid 2 separator being on the same visual space
     private minimumRangePercentage: number = 0.01;
 
-    // inner model
+    private _readOnly: boolean = true;
     private _ranges: IRange[];
-    get ranges(): IRange[] {
+    
+    // inner model
+    public get ranges(): IRange[] {
         return this._ranges || [];
     }
-    set ranges(ranges: IRange[]) {
+    public set ranges(ranges: IRange[]) {
         if (!!ranges) {
             this.writeValue(ranges);
             this._onChangeCallback(ranges);
         }
     }
 
+    // read / write mode 
+    @Input() 
+    public set readOnly(value: boolean) { 
+        this._readOnly = coerceBooleanProperty(value);
+    }
+    
+    public get readOnly() { 
+        return this._readOnly;
+    }
+    
     constructor(private elementRef: ElementRef) { }
 
     // ControlValueAccessor implementation

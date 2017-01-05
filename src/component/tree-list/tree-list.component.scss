@@ -2,10 +2,11 @@
 @import '../../common/core/item-list/item-list';
 deja-tree-list {
 	display: flex;
+	position: relative;
 	flex-direction: column;
 	align-content: stretch;
 	&.ng-invalid {
-		md-input {
+		#input {
 			.md-input-wrapper {
 				.md-input-underline {
 					.md-input-ripple {
@@ -21,7 +22,7 @@ deja-tree-list {
 			}
 		}
 	}
-	md-input {
+	#input {
 		outline: none;
 		&[wait="true"] {
 			.md-input-wrapper {
@@ -59,7 +60,7 @@ deja-tree-list {
 				}
 			}
 			[md-suffix] {
-				md-progress-circle {
+				md-progress-spinner {
 					width: 1.5rem;
 					height: 1.5rem;
 					svg path {
@@ -101,7 +102,7 @@ deja-tree-list {
 		flex: 0 0 auto;
 		align-items: center;
 		display: flex;
-		md-input {
+		#input {
 			flex: 1;
 		}
 		button {
@@ -148,8 +149,12 @@ deja-tree-list {
 		@import '../../common/core/item-list/tree-list';
 	}
 	#loader {
+		position: absolute;
+		left: 0;
+		right: 0;
+
 		.spinner {
-			margin: 100px auto 0;
+			margin: 40px auto 0;
 			width: 70px;
 			text-align: center;
 		}

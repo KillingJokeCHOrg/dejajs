@@ -1,9 +1,8 @@
 import { Component, ContentChild, ElementRef, forwardRef, Input, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { MdInput } from '@angular/material';
+import { coerceBooleanProperty } from '@angular/material/core/coercion/boolean-property';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { clearTimeout, setTimeout } from 'timers';
-import { BooleanFieldValue } from '../../common/core/annotations';
 import { Position } from '../../common/core/graphics';
 import { IItemBase, IItemTree, ItemListBase, ItemListService, IViewListResult } from '../../common/core/item-list';
 import { KeyCodes } from '../../common/core/keycodes.enum';
@@ -43,8 +42,6 @@ export class DejaSelectComponent extends ItemListBase implements ControlValueAcc
     @Input() public dropdownContainerId: string;
     /** Ancre d'alignement de la liste déroulante. Valeurs possible: top, bottom, right, left. Une combinaison des ces valeurs peut également être utilisée, par exemple 'top left'. */
     @Input() public dropdownAlignment = 'left right bottom';
-    /** Indique ou détermine si le bouton pour effacer la selection doit être affiché */
-    @Input() @BooleanFieldValue() public selectionClearable = false;
     /** Permet de définir un template de ligne par binding */
     @Input() public itemTemplateExternal;
     /** Permet de définir un template de ligne parente par binding. */
@@ -63,7 +60,7 @@ export class DejaSelectComponent extends ItemListBase implements ControlValueAcc
     @ContentChild('parentItemTemplate') private parentItemTemplateInternal;
     @ContentChild('selectedTemplate') private selectedTemplate;
     @ContentChild('suffixTemplate') private mdSuffix;
-    @ViewChild(MdInput) private inputComponent: MdInput;
+    @ViewChild('inputelement') private inputElementRef: ElementRef;
     @ViewChildren('dropdownitem') private dropdownItemElements: QueryList<ElementRef>;
     @ViewChild('listcontainer') private listcontainer;
     @ViewChild(DejaDropDownComponent) private dropDownComponent: DejaDropDownComponent;
@@ -82,12 +79,23 @@ export class DejaSelectComponent extends ItemListBase implements ControlValueAcc
     private scrollTimeout: NodeJS.Timer;
     private dropdownVisible = false;
     private lastScrollPosition = 0;
+    private _selectionClearable = false;
 
     private mouseMoveObs: Subscription;
     private mouseUpObs: Subscription;
 
     constructor(private elementRef: ElementRef) {
         super();
+    }
+
+    /** Indique ou détermine si le bouton pour effacer la selection doit être affiché */
+    @Input()
+    public set selectionClearable(value: boolean) {
+        this._selectionClearable = coerceBooleanProperty(value);
+    }
+
+    public get selectionClearable() {
+        return this._selectionClearable;
     }
 
     @Input()
@@ -191,7 +199,6 @@ export class DejaSelectComponent extends ItemListBase implements ControlValueAcc
         return this._searchField;
     }
 
-
     @Input()
     public set type(type: any) {
         if (type !== 'autocomplete' && type !== 'multiselect' && type !== 'select') {
@@ -260,7 +267,7 @@ export class DejaSelectComponent extends ItemListBase implements ControlValueAcc
     }
 
     private get inputElement() {
-        return this.inputComponent && this.inputComponent._inputElement && this.inputComponent._inputElement.nativeElement;
+        return this.inputElementRef && this.inputElementRef.nativeElement as HTMLInputElement;
     }
 
     private set keyboardNavigation(value: boolean) {
@@ -615,7 +622,7 @@ export class DejaSelectComponent extends ItemListBase implements ControlValueAcc
             this.dropDownQuery = '';
             this.value = undefined;
             delete this.selectingItemIndex;
-            this.inputComponent.focus();
+            this.inputElement.focus();
             this.hideDropDown();
             this.onChangeCallback(this.value);
         } else {
@@ -705,7 +712,7 @@ export class DejaSelectComponent extends ItemListBase implements ControlValueAcc
             this.value = undefined;
         }
 
-        this.inputComponent.focus();
+        this.inputElement.focus();
         if (hideDropDown !== false) {
             this.hideDropDown();
         }

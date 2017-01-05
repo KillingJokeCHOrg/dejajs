@@ -1,6 +1,6 @@
 import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { coerceBooleanProperty } from '@angular/material/core/coercion/boolean-property';
 import { Observable, Subscription } from 'rxjs/Rx';
-import { BooleanFieldValue } from '../../../common/core/annotations';
 import { ISortInfos } from "../../../common/core/sorting/index";
 import { IDejaDragEvent, IDejaDropEvent } from "../../index";
 import { IDejaGridColumn, IDejaGridColumnEvent, IDejaGridColumnLayout, IDejaGridColumnLayoutEvent, IDejaGridColumnSizeEvent } from "../index";
@@ -17,21 +17,6 @@ export class DejaGridHeaderComponent {
     /** Infos de tri à afficher dans les entêtes */
     @Input() public sortInfos: ISortInfos;
     
-    /** Définit si toutes les colonnes peuvent être draggable vers un autre composant.
-     * Si une valeur spécifique à une colonne est spécifiée dans le modèle de la colonne, cette dernière sera prioritaire.
-     */
-    @Input() @BooleanFieldValue() public columnsDraggable = false;      
-    
-    /** Définit si toutes les colonnes peuvent être déplacées parmis les autres colonnes.
-     * Si une valeur spécifique à une colonne est spécifiée dans le modèle de la colonne, cette dernière sera prioritaire.
-     */
-    @Input() @BooleanFieldValue() public columnsSortable = false;      
-
-    /** Définit si toutes les colonnes peuvent être redimensionées
-     * Si une valeur spécifique à une colonne est spécifiée dans le modèle de la colonne, cette dernière sera prioritaire.
-     */
-    @Input() @BooleanFieldValue() public columnsSizable = false;        
-    
     /** Cet évenement est levé lorsque la taille d'une colonne est modifiée */
     @Output() public columnSizeChanged = new EventEmitter<IDejaGridColumnSizeEvent>();
     
@@ -44,6 +29,9 @@ export class DejaGridHeaderComponent {
     /** Template d'entête de colonne par defaut définit dans le HTML de la grille */
     @ContentChild('columnHeaderTemplate') protected columnHeaderTemplateInternal;
 
+    private _columnsDraggable = false;
+    private _columnsSortable = false;
+    private _columnsSizable = false;
     private _columnLayout = {} as IDejaGridColumnLayout;
     private backupColumnOrder = [] as IDejaGridColumn[];
     private _sizedColumn: IDejaGridColumn;
@@ -53,6 +41,51 @@ export class DejaGridHeaderComponent {
     private clickedTime: number;
     private mouseMoveObs: Subscription;
     private mouseUpObs: Subscription;
+
+    /** Définit si toutes les colonnes peuvent être draggable vers un autre composant.
+     * Si une valeur spécifique à une colonne est spécifiée dans le modèle de la colonne, cette dernière sera prioritaire.
+     */
+    @Input()
+    public set columnsDraggable(value: boolean) {
+        this._columnsDraggable = coerceBooleanProperty(value);
+    }
+
+    /** Retourne si toutes les colonnes peuvent être draggable vers un autre composant.
+     * Si une valeur spécifique à une colonne est spécifiée dans le modèle de la colonne, cette dernière sera prioritaire.
+     */
+    public get columnsDraggable() {
+        return this._columnsDraggable;
+    }
+
+    /** Définit si toutes les colonnes peuvent être déplacées parmis les autres colonnes.
+     * Si une valeur spécifique à une colonne est spécifiée dans le modèle de la colonne, cette dernière sera prioritaire.
+     */
+    @Input()
+    public set columnsSortable(value: boolean) {
+        this._columnsSortable = coerceBooleanProperty(value);
+    }
+
+    /** Retourne si toutes les colonnes peuvent être déplacées parmis les autres colonnes.
+     * Si une valeur spécifique à une colonne est spécifiée dans le modèle de la colonne, cette dernière sera prioritaire.
+     */
+    public get columnsSortable() {
+        return this._columnsSortable;
+    }
+
+    /** Définit si toutes les colonnes peuvent être redimensionées
+     * Si une valeur spécifique à une colonne est spécifiée dans le modèle de la colonne, cette dernière sera prioritaire.
+     */
+    @Input()
+    public set columnsSizable(value: boolean) {
+        this._columnsSizable = coerceBooleanProperty(value);
+    }
+
+    /** Retourne si toutes les colonnes peuvent être redimensionées
+     * Si une valeur spécifique à une colonne est spécifiée dans le modèle de la colonne, cette dernière sera prioritaire.
+     */
+    public get columnsSizable() {
+        return this._columnsSizable;
+    }
 
     @Input()
     /** Définit la structire de colonnes associée aux entêtes */

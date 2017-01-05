@@ -89,6 +89,12 @@ export class DejaMonacoEditorDemo implements OnInit {
     <td>Désactive le parsing du contenu afin d'afficher une autompletion mise à jour a chaque fois que l'utilisateur saise Ctrl + Espace</td>
 </tr>
 <tr>
+    <td>autoFormatOnLoad</td>
+    <td>Oui</td>
+    <td>Boolean</td>
+    <td>Indique à l'éditeur si le contenu doit etre formaté une fois chargé (auto indentation)</td>
+</tr>
+<tr>
     <td>valueChange</td>
     <td>Non</td>
     <td>Event</td>

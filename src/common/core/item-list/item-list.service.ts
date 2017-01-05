@@ -71,31 +71,37 @@ export class ItemListService {
         return this._hideSelected;
     }
 
+    private set items(items: IItemBase[]) {
+        this._items = items;
+        this.invalidateCache();
+    }
+
+    private get items() {
+        return this._items;
+    }
+
     /** Définit le modèle utilisé par la liste. Ce model peut ètre hierarchique sans limitation de la profondeur ou une chargé en asynchrone par une promise ou un observable.
      * @param items Provider de la liste des éléments de la liste.
      */
     public setItems(items: IItemBase[] | Promise<IItemBase[]> | Observable<IItemBase[]>) {
         return new Observable<IItemBase[]>((subscriber: Subscriber<{}>) => {
             if (!items) {
-                this._items = undefined;
-                this.invalidateCache();
+                this.items = undefined;
                 subscriber.next();
             } else if (items instanceof Array) {
                 this.ensureSelectedItems(items);
-                this._items = items;
-                this.ensureChildrenProperties(this._items);
-                this.invalidateCache();
+                this.items = items;
+                this.ensureChildrenProperties(this.items);
                 subscriber.next();
             } else {
                 let promise = items as Promise<IItemBase[]>;
                 if (promise.then) {
                     promise.then((itms) => {
-                        if (!this._items || !this._items.length) {
+                        if (!this.items || !this.items.length) {
                             this.ensureSelectedItems(itms);
                         }
-                        this._items = itms;
-                        this.ensureChildrenProperties(this._items);
-                        this.invalidateCache();
+                        this.items = itms;
+                        this.ensureChildrenProperties(this.items);
                         subscriber.next();
                     }).catch((err) => {
                         subscriber.error(err);
@@ -103,13 +109,12 @@ export class ItemListService {
                 } else {
                     let observable = items as Observable<IItemBase[]>;
                     observable.subscribe((itms) => {
-                        if (!this._items || !this._items.length) {
+                        if (!this.items || !this.items.length) {
                             this.ensureSelectedItems(itms);
                         }
                         this.ensureChildrenProperties(itms);
-                        this._items = [...this._items || [], ...itms];
-                        console.log(`Loaded ${this._items.length} items`);
-                        this.invalidateCache();
+                        this.items = [...this.items || [], ...itms];
+                        console.log(`Loaded ${this.items.length} items`);
                         subscriber.next();
                     }, (err) => {
                         subscriber.error(err);
@@ -128,7 +133,7 @@ export class ItemListService {
 
     // Ne pas utiliser, cette fonction retourne la liste des éléments pour l'implémentation de ngModel.
     public getItems() {
-        return this._items;
+        return this.items;
     }
 
     /** Retourne l'élément corresondant à l'index spéficié dans la liste des éléments visibles.
@@ -203,7 +208,7 @@ export class ItemListService {
     /** Usage interne. Termine le drag and drop en cours. */
     public drop(): Promise<boolean> {
         return new Promise<boolean>((resolved?: (result: boolean) => void, rejected?: (reason: any) => void) => {
-            if (!this._ddList || !this._items) {
+            if (!this._ddList || !this.items) {
                 resolved(false);
                 return;
             }
@@ -253,13 +258,13 @@ export class ItemListService {
                 }
             };
 
-            let originResult = findItem(item, this._items);
+            let originResult = findItem(item, this.items);
 
             // Remove item from the origin
             originResult.list.splice(originResult.index, 1);
 
             // Add in the new location
-            let targetList = targetParent ? targetParent.$items : this._items;
+            let targetList = targetParent ? targetParent.$items : this.items;
 
             if (targetIndex > originResult.index && originResult.list === targetList) {
                 --targetIndex;
@@ -474,7 +479,7 @@ export class ItemListService {
         if (this.hideSelected) {
             delete this._cache.visibleList;
         }
-        this.ensureSelectedItems(this._items);
+        this.ensureSelectedItems(this.items);
     }
 
     /** Déselectionne tous les éléments sélectionés.
@@ -662,7 +667,7 @@ export class ItemListService {
      */
     public sort(sortInfos: ISortInfos) {
         return new Promise<ISortInfos>((resolved?: (value: ISortInfos) => void, rejected?: (reason: any) => void) => {
-            if (!this._items) {
+            if (!this.items) {
                 rejected('No Items');
                 return;
             }
@@ -677,7 +682,7 @@ export class ItemListService {
             };
 
             if (!this._cache.groupedList || this._cache.groupedList.length === 0) {
-                this.getGroupedList(this._items).then((groupedList) => {
+                this.getGroupedList(this.items).then((groupedList) => {
                     this._cache.groupedList = groupedList;
                     sortTree();
                 }).catch((err) => {
@@ -697,7 +702,7 @@ export class ItemListService {
         return new Promise<IGroupInfo[]>((resolved?: (value: IGroupInfo[]) => void, rejected?: (reason: any) => void) => {
             this._groupInfos = groupInfos;
             this.invalidateCache();
-            this.ensureChildrenProperties(this._items);
+            this.ensureChildrenProperties(this.items);
             resolved(groupInfos);
         });
     }
@@ -714,7 +719,7 @@ export class ItemListService {
             }
 
             this.invalidateCache();
-            this.ensureChildrenProperties(this._items);
+            this.ensureChildrenProperties(this.items);
             resolved(groupInfo);
         });
     }
@@ -732,7 +737,7 @@ export class ItemListService {
                 }
 
                 if (!item.depth) {
-                    let rootIndex = this._items.findIndex((itm) => itm === item);
+                    let rootIndex = this.items.findIndex((itm) => itm === item);
                     resolved({
                         index: rootIndex,
                     } as IParentListInfoResult);
@@ -755,7 +760,7 @@ export class ItemListService {
             };
 
             if (!this._cache.flatList) {
-                this.ensureFlatListCache().then((flatList) => {
+                this.ensureFlatListCache(true).then((flatList) => {
                     search(this._cache.flatList);
                 }).catch((err) => {
                     rejected(err);
@@ -776,7 +781,7 @@ export class ItemListService {
         return new Promise<IViewListResult>((resolved?: (value: IViewListResult) => void, rejected?: (reason: any) => void) => {
             let result = {} as IViewListResult;
 
-            ignoreCache = ignoreCache || query !== this.lastQuery || !this._items;
+            ignoreCache = ignoreCache || query !== this.lastQuery || !this.items || !this.items.length;
             this.lastQuery = query;
 
             // Check regexp validity
@@ -865,15 +870,14 @@ export class ItemListService {
             if (ignoreCache) {
                 // console.log('getItemList ' + Date.now());
                 this.getItemList(query, this.selectedList).then((items) => {
-                    if (!this._items || !this._items.length) {
+                    if (!this.items || !this.items.length) {
                         this.ensureSelectedItems(items);
                     }
 
-                    if (items !== this._items) {
+                    if (items !== this.items) {
                         // New item list, invalidate view cache
-                        this._items = items;
-                        this.ensureChildrenProperties(this._items);
-                        this.invalidateCache();
+                        this.items = items;
+                        this.ensureChildrenProperties(this.items);
                         // Be cause a new array was returned by getItemList, the list is considered as already filtered (Lazy loading)
                         regExp = undefined;
                     }
@@ -899,8 +903,8 @@ export class ItemListService {
      */
     protected getItemList(query?: RegExp | string, selectedItems?: IItemBase[]): Promise<IItemBase[]> {
         return new Promise<IItemBase[]>((resolved?: (result: IItemBase[]) => void, rejected?: (reason: any) => void) => {
-            this._items = this._items || [];
-            resolved(this._items);
+            this.items = this.items || [];
+            resolved(this.items);
         });
     }
 
@@ -912,7 +916,7 @@ export class ItemListService {
      */
     protected itemMatch(item: IItemBase, searchField: string, regExp: RegExp) {
         let value;
-        if (typeof item[searchField] === 'Function') {
+        if (typeof item[searchField] === 'function') {
             value = item[searchField]();
         } else if (item[searchField]) {
             value = item[searchField];
@@ -939,7 +943,7 @@ export class ItemListService {
                 return;
             }
 
-            this.getGroupingService().group(this._items, this.groupInfos, '$items').then((groupedList) => {
+            this.getGroupingService().group(this.items, this.groupInfos, '$items').then((groupedList) => {
                 resolved(groupedList);
             }).catch((err) => {
                 rejected(err);
@@ -1069,7 +1073,7 @@ export class ItemListService {
      * @param {IItemBase[]} items Liste des éléments hierarchique.
      * @return {Promise} Promesse résolue par la fonction, qui retourne la liste hierarchique mise à plat.
      */
-    protected getFlatList(items: IItemBase[]): Promise<IItemBase[]> {
+    protected getFlatList(items: IItemBase[], isFiltered): Promise<IItemBase[]> {
         return new Promise<IItemBase[]>((resolved?: (result: IItemBase[]) => void, rejected?: (reason: any) => void) => {
             if (!items) {
                 resolved([]);
@@ -1126,7 +1130,9 @@ export class ItemListService {
             getFlatListInternal(items, 0, false);
 
             this.selectedList = selectedList;
-            this._cache.visibleList = visibleList;
+            if (!isFiltered) {
+                this._cache.visibleList = visibleList;
+            }    
             this._cache.depthMax = isTree ? depthMax : 0;
 
             resolved(flatList);
@@ -1160,9 +1166,9 @@ export class ItemListService {
         selectedList.forEach((item) => item.selected = true);
     }
 
-    private ensureVisibleListCache(searchField, regExp) {
+    private ensureVisibleListCache(searchField: string, regExp: RegExp) {
         return new Promise((resolved?: () => void, rejected?: (reason: any) => void) => {
-            this.ensureFlatListCache().then(() => {
+            this.ensureFlatListCache(!!regExp).then(() => {
                 this.getVisibleList(this._cache.groupedList, searchField, regExp).then((visibleList) => {
                     /* if (this._cache.visibleList && this._cache.visibleList.length && this._cache.visibleList !== visibleList) {
                      // New visible list
@@ -1177,10 +1183,10 @@ export class ItemListService {
         });
     }
 
-    private ensureFlatListCache() {
+    private ensureFlatListCache(isFiltered: boolean) {
         return new Promise((resolved?: () => void, rejected?: (reason: any) => void) => {
             this.ensureGroupedListCache().then(() => {
-                this.getFlatList(this._cache.groupedList).then((flatList) => {
+                this.getFlatList(this._cache.groupedList, isFiltered).then((flatList) => {
                     if (this._cache.flatList && this._cache.flatList.length && this._cache.flatList !== flatList) {
                         // New flat list
                         delete this._cache.visibleList;
@@ -1206,10 +1212,10 @@ export class ItemListService {
     private ensureGroupedListCache() {
         return new Promise((resolved?: () => void, rejected?: (reason: any) => void) => {
             if (!this.groupInfos || this.groupInfos.length === 0) {
-                this._cache.groupedList = this._items;
+                this._cache.groupedList = this.items;
                 resolved();
             } else {
-                this.getGroupedList(this._items).then((groupedList) => {
+                this.getGroupedList(this.items).then((groupedList) => {
                     if (this._cache.groupedList && this._cache.groupedList.length && this._cache.groupedList !== groupedList) {
                         // New grouped list
                         this.invalidateViewCache();

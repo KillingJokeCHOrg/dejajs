@@ -504,4 +504,13 @@ export class DejaSnackbarComponent implements OnInit, AfterViewInit, OnDestroy {
     ]);
   }
 
+  private increaseElevation() {
+    const zIndex = window.getComputedStyle(this.innerContainerElement).zIndex;
+    this.innerContainerElement.style.zIndex = (+zIndex + 1).toString();
+  }
+  private decreaseElevation() {
+    const zIndex = window.getComputedStyle(this.innerContainerElement).zIndex;
+    this.innerContainerElement.style.zIndex = (+zIndex - 1).toString();
+  }
+
 }

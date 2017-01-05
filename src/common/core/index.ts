@@ -1,4 +1,3 @@
-export * from "./annotations/index";
 export * from "./graphics/index";
 export * from "./sorting/index";
 export * from "./graphics/index";

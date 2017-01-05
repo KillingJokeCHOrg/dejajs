@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChange, ViewChild, ViewEncapsulation, HostListener } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, Output, SimpleChange, ViewChild, ViewEncapsulation} from '@angular/core';
+import {isUndefined} from "util";
+import {AutoCompleteSingleton} from "./options/autocomplete-singleton.model";
 import { IEditorLanguage } from "./options/editor-language.model";
 import { IEditorOptions } from "./options/editor-options.model";
 import { IEditorScrollbarOptions } from "./options/editor-scrollbar-options";
 import { IEditorTheme } from "./options/editor-theme.component";
-import { isUndefined} from "util";
-import {AutoCompleteSingleton} from "./options/autocomplete-singleton.model";
 
 declare const require: any;
 declare const monaco: any;
@@ -77,13 +77,15 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
     @Input() public lineHeight?: number;
 
     @Input() public language: IEditorLanguage;
-    @Input() public disableAutocomplete: boolean;
 
+    @Input() public disableAutocomplete: boolean;
+    @Input() public autoFormatOnLoad: boolean = true;
     @Input() public monacoLibPath: string = 'vs/loader.js';
 
     @Input() set valueToCompare(v: string) {
         if (v !== this._valueToCompare) {
             this._valueToCompare = v;
+            this._isCodeFormatted = false; // Set to false autoFormat to reformat on next load
 
             if (isUndefined(this._valueToCompare) || !this._valueToCompare || !this._editor) {
                 if(this._editor && this._editor.getEditorType() !== 'vs.editor.ICodeEditor'){
@@ -110,6 +112,7 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
     @Input() set value(v: string) {
         if (v !== this._value) {
             this._value = v;
+            this._isCodeFormatted = false; // Set to false autoFormat to reformat on next load
 
             if (isUndefined(this._value) || !this._editor) {
                 return;
@@ -132,8 +135,9 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
     @ViewChild('editor') private editorContent: ElementRef;
 
     private _editor: any;
-    private _value = '';
-    private _valueToCompare = '';
+    private _value: string = '';
+    private _valueToCompare: string = '';
+    private _isCodeFormatted: boolean = false;
 
     constructor() {
     }
@@ -226,6 +230,15 @@ export class DejaMonacoEditorComponent implements OnDestroy, AfterViewInit, OnCh
         if (!this.disableAutocomplete) {
             AutoCompleteSingleton.getInstance().initAutoComplete(this.language);
         }
+
+        // When content is loaded, scrollChange is trigerred,
+        // We can only force auto format at this moment, because editor doesn't have onReady event ...
+        /* this._editor.onDidScrollChange(() => {
+            if (this.autoFormatOnLoad && !this._isCodeFormatted) {
+                this._editor.getAction("editor.action.format").run();
+                this._isCodeFormatted = true;
+            }
+        });*/
 
         // Trigger on change event for simple editor
         this.getOriginalModel().onDidChangeContent((e) => {

@@ -2,14 +2,15 @@
 	<button md-raised-button class="md-primary" *ngIf="expandButton" (click)="toggleAll()">
 		Tout {{(allCollapsed)?'étendre':'réduire'}}
 	</button>
-	<md-input *ngIf="searchArea || minlength > 0" type="text" tabindex="0" [attr.wait]="waiter" [(ngModel)]="query" (keydown)="filter($event)" (keyup)="filter($event)" (drop)="filter($event)" [placeholder]="placeholder">
+	<md-input-container id="input" *ngIf="searchArea || minlength > 0" [attr.wait]="waiter">
+        <input #inputelement type="text" md-input tabindex="0" [(ngModel)]="query" (keydown)="filter($event)" (keyup)="filter($event)" (drop)="filter($event)" [placeholder]="placeholder">    
 		<span *ngIf="searchPrefixTemplate" md-prefix>
 			<template [ngTemplateOutlet]="searchPrefixTemplate"></template>
 		</span>
 		<span *ngIf="searchSuffixTemplate" md-suffix>
 			<template [ngTemplateOutlet]="searchSuffixTemplate"></template>
 		</span>
-	</md-input>
+	</md-input-container>
 </div>
 <div id="list-header" *ngIf="headerTemplate">
 	<template [ngTemplateOutlet]="headerTemplate"></template>
@@ -31,7 +32,7 @@
 		</li>
 	</ul>
 	<div *ngIf="vpAfterHeight" [style.height.px]="vpAfterHeight"></div>
-	<!--<div id="loader" *ngIf="_isLoading">
+	<div id="loader" *ngIf="_isLoading">
 		<span class="loader-container" *ngIf="!loaderTemplate">
 			<div class="spinner">
 				<div class="bounce1"></div>
@@ -42,5 +43,5 @@
 		<span class="loader-container" *ngIf="loaderTemplate">
 			<template [ngTemplateOutlet]="loaderTemplate"></template>
 		</span>
-	</div>-->    
+	</div>
 </div>

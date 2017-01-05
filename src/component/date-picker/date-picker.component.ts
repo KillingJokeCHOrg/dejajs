@@ -1,32 +1,27 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter, forwardRef, ElementRef, ViewEncapsulation, ContentChild } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { Observable, Subscription } from 'rxjs/Rx';
+import { coerceBooleanProperty } from '@angular/material/core/coercion/boolean-property';
 import * as moment from 'moment';
+import { Observable, Subscription } from 'rxjs/Rx';
 import 'rxjs/Rx';
-
-import { DejaDateSelectorComponent, DaysOfWeek } from '../date-selector';
-import { BooleanFieldValue } from '../../common/core/annotations';
-import { MdInput } from '@angular/material';
+import { DaysOfWeek, DejaDateSelectorComponent } from '../date-selector';
 
 const noop = () => { };
 
 const DejaDatePickerComponentValueAccessor = {
+    multi: true,
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DejaDatePickerComponent),
-    multi: true,
 };
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    selector: 'deja-date-picker',
-    templateUrl: './date-picker.component.html',
-    styleUrls: ['./date-picker.component.scss'],
     providers: [DejaDatePickerComponentValueAccessor],
+    selector: 'deja-date-picker',
+    styleUrls: ['./date-picker.component.scss'],
+    templateUrl: './date-picker.component.html',
 })
 export class DejaDatePickerComponent implements OnInit {
-
-    @Input() @BooleanFieldValue() public disabled: boolean = false;
-    @Input() @BooleanFieldValue() public time: boolean = false;
     @Input() public dateMax: Date;
     @Input() public dateMin: Date;
     @Input() public dropdownContainerId: string;
@@ -34,16 +29,18 @@ export class DejaDatePickerComponent implements OnInit {
     @Input() public ownerAlignment = 'left bottom';
     @Input() public format: string;
     @Input() public placeholder: string = 'Date';
-    @Input() public disableDates: (DaysOfWeek | Date)[]; // | ((d: Date) => boolean);
+    @Input() public disableDates: Array<DaysOfWeek | Date>; // | ((d: Date) => boolean);
     @ViewChild(DejaDateSelectorComponent) public dateSelectorComponent: DejaDateSelectorComponent;
-    @ViewChild(MdInput) public inputDateElem: MdInput;
     @Output() public dateChange = new EventEmitter();
-
     @ContentChild('hintTemplate') protected mdHint;
+    @ViewChild('inputelement') private inputElementRef: ElementRef;
+
 
     private _useDropDown = false;
     private keydown: Observable<{}>;
     private keyDownSubscription: Subscription;
+    private _disabled: boolean = false;
+    private _time: boolean = false;
 
     private date = new Date();
 
@@ -64,7 +61,7 @@ export class DejaDatePickerComponent implements OnInit {
         if (value !== this._useDropDown) {
             this._useDropDown = value;
             if (value) {
-                this.keydown = Observable.fromEvent(this.inputDateElem._inputElement.nativeElement, 'keydown');
+                this.keydown = Observable.fromEvent(this.inputElementRef.nativeElement, 'keydown');
                 this.keyDownSubscription = this.keydown.subscribe((event: KeyboardEvent) => {
                     this.dateSelectorComponent.keyboardNavigation = false;
                 });
@@ -81,18 +78,36 @@ export class DejaDatePickerComponent implements OnInit {
         return this._useDropDown;
     }
 
-     // ************* ControlValueAccessor Implementation **************
-    // get accessor
-    get value(): Date {
-        return this.date;
-    };
+    @Input()
+    public set disabled(value: boolean) {
+        this._disabled = coerceBooleanProperty(value);
+    }
 
+    public get disabled() {
+        return this._disabled;
+    }
+
+    @Input()
+    public set time(value: boolean) {
+        this._time = coerceBooleanProperty(value);
+    }
+
+    public get time() {
+        return this._time;
+    }
+    
     // set accessor including call the onchange callback
-    set value(v: Date) {
+    public set value(v: Date) {
         if (v !== this.date) {
             this.writeValue(v);
             this.onChangeCallback(v);
         }
+    }
+
+    // ************* ControlValueAccessor Implementation **************
+    // get accessor
+    public get value(): Date {
+        return this.date;
     }
 
     // From ControlValueAccessor interface
@@ -115,10 +130,10 @@ export class DejaDatePickerComponent implements OnInit {
     // ************* End of ControlValueAccessor Implementation **************
 
     protected toggleDateSelector(event: Event) {
-        if (this.disabled) { 
+        if (this.disabled) {
             return;
         }
-        
+
         let target = event.currentTarget as HTMLElement;
         if (target.id !== 'deja-date-selector-input') {
             return;

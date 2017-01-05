@@ -16,38 +16,41 @@ import { DejaSplitterComponent } from './splitter.component';
 })
 export class SplitAreaDirective implements OnInit, OnDestroy {
 
-    private _order: number | null = null;
-    @Input() set order(v: number) {
+    @Input()
+    public set order(v: number) {
         this._order = !isNaN(v) ? v : null;
         this.split.updateArea(this, this._order, this._size, this._minSizePixel);
     }
 
-    private _size: number | null = null;
-    @Input() set size(v: any) {
+    @Input()
+    public set size(v: number) {
         this._size = !isNaN(v) ? v : null;
         this.split.updateArea(this, this._order, this._size, this._minSizePixel);
     }
 
-    private _minSizePixel: number = 0;
-    @Input() set minSizePixel(v: number) {
+    @Input()
+    public set minSizePixel(v: number) {
         this._minSizePixel = (!isNaN(v) && v > 0) ? v : 0;
         this.split.updateArea(this, this._order, this._size, this._minSizePixel);
     }
 
-    eventsLockFct: Array<Function> = [];
+    private _order: number | null = null;
+    private _size: number | null = null;
+    private _minSizePixel: number = 0;
+    private eventsLockFct: Function[] = [];
 
     constructor(private elementRef: ElementRef,
                 private renderer: Renderer,
-                private split: DejaSplitterComponent) {}
+                private split: DejaSplitterComponent) {
+    }
 
     public ngOnInit() {
         this.split.addArea(this, this._order, this._size, this._minSizePixel);
     }
 
-
     public lockEvents() {
-        this.eventsLockFct.push( this.renderer.listen(this.elementRef.nativeElement, 'selectstart', e => false) );
-        this.eventsLockFct.push( this.renderer.listen(this.elementRef.nativeElement, 'dragstart', e => false) );
+        this.eventsLockFct.push(this.renderer.listen(this.elementRef.nativeElement, 'selectstart', (e) => false));
+        this.eventsLockFct.push(this.renderer.listen(this.elementRef.nativeElement, 'dragstart', (e) => false));
     }
 
     public unlockEvents() {

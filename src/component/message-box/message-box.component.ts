@@ -1,5 +1,5 @@
 import { Component, ContentChild, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { BooleanFieldValue } from '../../common/core/annotations';
+import { coerceBooleanProperty } from '@angular/material/core/coercion/boolean-property';
 
 @Component({
     selector: 'deja-message-box',
@@ -11,10 +11,18 @@ export class DejaMessageBoxComponent implements OnInit {
     @Input() public title: string;
     @Input() public icon: string;
     @Input() public actions: Array<{text?: string, type?: 'info' | 'primary' | 'success' | 'warn' | 'danger', icon?: string, action: () => any}>;
-
-    @Input() @BooleanFieldValue() public horizontal: boolean;
-
     @ContentChild('actionsTemplate') protected actionsTemplate;
+
+    private _horizontal: boolean;
+
+    @Input() 
+    public set horizontal(value: boolean) { 
+        this._horizontal = coerceBooleanProperty(value);
+    }
+
+    public get horizontal() { 
+        return this._horizontal;
+    }
 
     constructor() { }
 

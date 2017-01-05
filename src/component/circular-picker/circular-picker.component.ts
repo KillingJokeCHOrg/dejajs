@@ -1,9 +1,8 @@
 import { Component, ElementRef, forwardRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-
+import {coerceBooleanProperty} from '@angular/material/core/coercion/boolean-property';
 import { Observable, Subscription } from 'rxjs/Rx';
-
-import { BooleanFieldValue, Circle, Position, Rect } from '../../common/core';
+import { Circle, Position, Rect } from '../../common/core';
 
 const noop = () => { };
 
@@ -31,7 +30,6 @@ interface ICircularValue {
 })
 export class DejaCircularPickerComponent implements OnInit {
     @Input() public clockwiseFactor: ClockwiseFactorEnum = ClockwiseFactorEnum.clockwise;
-    @Input() @BooleanFieldValue() public disabled: boolean = false;
     @Input() public fullDiameter: number = 310;
     @Input() public labelsDiameter = 43;
     @Input() public outerLabels: boolean = false;
@@ -41,7 +39,16 @@ export class DejaCircularPickerComponent implements OnInit {
         value: number,
     }>;
 
-    @ViewChild('picker') private picker: ElementRef;
+    @Input() 
+    public set disabled(value: boolean) { 
+        this._disabled = coerceBooleanProperty(value);
+    }
+    
+    public get disabled() { 
+        return this._disabled;
+    }
+    
+    private _disabled = false;
 
     private _value: number;
     private TwoPI = Math.PI * 2;
@@ -65,6 +72,8 @@ export class DejaCircularPickerComponent implements OnInit {
 
     private circle: Circle;
 
+    @ViewChild('picker') private picker: ElementRef;
+    
     constructor(private elementRef: ElementRef) { }
 
     public ngOnInit() {

@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { coerceBooleanProperty } from '@angular/material/core/coercion/boolean-property';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { clearTimeout, setTimeout } from 'timers';
-import { BooleanFieldValue } from '../../common/core/annotations';
 import { Color, ColorEvent } from '../../common/core/graphics/index';
 import { MaterialColor } from '../../common/core/style';
 
@@ -26,15 +26,13 @@ const ColorSelectorComponentAccessor = {
     templateUrl: './color-selector.component.html',
 })
 export class DejaColorSelectorComponent implements ControlValueAccessor {
-    /** Retourne ou definit si le selecteur est desactivé. */
-    @Input() @BooleanFieldValue() public disabled: boolean = false;
-
     /** Evénement déclenché lorsqu'une couleur est survolée par la souris. */
     @Output() public colorhover = new EventEmitter();
 
     protected onTouchedCallback: () => void = noop;
     protected onChangeCallback: (_: any) => void = noop;
 
+private _disabled = false;    
     private _colors: MaterialColor[];
     private _selectBaseIndex: number;
     private hoveredBaseIndex: number;
@@ -53,6 +51,16 @@ export class DejaColorSelectorComponent implements ControlValueAccessor {
     constructor(private elementRef: ElementRef) {
     }
 
+    /** Retourne ou definit si le selecteur est desactivé. */
+    @Input() 
+    public set disabled(value: boolean) { 
+        this._disabled = coerceBooleanProperty(value);
+    }
+    
+    public get disabled() { 
+        return this._disabled;
+    }
+    
     /**
      * Definit les couleurs selectionables affichées.
      *

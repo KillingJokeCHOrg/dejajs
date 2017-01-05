@@ -27,4 +27,3 @@ Take a look at the `src` folder. All components and demo application are placed 
 
 and navigate to `http://localhost:5200`.
 
-

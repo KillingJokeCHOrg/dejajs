@@ -31,7 +31,7 @@ Ensuite utiliser le composant comme ceci dans votre template :
 </tr>
 <tr>
     <td>horizontal</td>
-    <td>BooleanFieldValue</td>
+    <td>boolean</td>
     <td>null / false</td>
     <td>Rend le message box horizontal.</td>
 </tr>
