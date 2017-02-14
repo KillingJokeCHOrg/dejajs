@@ -1,6 +1,6 @@
 {
     "name": "deja-angular2",
-    "version": "0.0.1-beta4",
+    "version": "0.0.1-beta5",
     "description": "Angular2 Components Library",
     "homepage": "https://github.com/KillingJokeCHOrg/dejajs",
     "bugs": "https://github.com/KillingJokeCHOrg/dejajs/issues",
@@ -24,6 +24,7 @@
         "serve": "lite-server && concurrently \"npm run countries\" \"npm run drug\""
     },
     "keywords": [
+        "@deja-js/component",
         "angular2",
         "material",
         "component",
