@@ -19,3 +19,4 @@ typings/
 
 #npm-debug logs horodated
 npm-debug.log*
+.npmrc
